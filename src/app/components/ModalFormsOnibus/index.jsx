@@ -155,6 +155,8 @@ const ModalFormsOnibus = () => {
                     ></iframe>
                 )}
             </div>
+            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7736006621106112"
+     crossorigin="anonymous"></script>
         </div>
     );
 };

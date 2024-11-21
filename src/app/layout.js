@@ -17,10 +17,12 @@ export const metadata = {
   description: "Com o app Pega o Bus Aí, consulte os horários de ônibus em tempo real, visualize rotas e receba alertas sobre a chegada e partida de ônibus na sua cidade. Planeje sua viagem, evite atrasos e saiba tudo sobre as linhas de transporte público. Não perca mais tempo esperando na parada!",
 };
 
-
 export default function RootLayout({ children }) {
   return (
     <html lang="pt-BR">
+      <head>
+        <meta name="google-adsense-account" content="ca-pub-7736006621106112" />
+      </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         {children}
       </body>
