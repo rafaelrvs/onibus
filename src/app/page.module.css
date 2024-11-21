@@ -1,0 +1,70 @@
+
+.page{
+  height: 100vh;
+}
+.header{
+  display: flex;
+  align-items: center;
+  color: #fff;
+  background-color:var(--background-blue);
+  height: 100px;
+  justify-content: space-between;
+  padding: 30px;
+}
+.containerlogoEnome{
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+  gap: 25px;
+}
+.logoOnibus{
+  padding: 5px;
+  height: 90px;
+}
+
+.containerbtnHeader{
+  display: flex;
+  gap: 10px;
+  padding: 15px;
+  flex-wrap: nowrap;
+  
+}
+.h1{
+  font-size: 1.5rem;
+}
+.headerBtnlogin,.headerBtnInicie{
+  padding: 10px 35px;
+  transition: 0.5s;
+}
+.headerBtnlogin:hover,.headerBtnInicie:hover{
+  scale: 1.03;
+  cursor: pointer;
+}
+.headerBtnlogin{
+  background-color: var(--background-blue);
+  border: #fff 1px solid;
+  color: #fff;
+  border-radius: 5px;
+  padding: 10px 35px;
+}
+.headerBtnInicie{
+  background-color:
+  #A3FFBF;
+
+color: 1000;
+  border-radius: 5px;
+  border: none;
+
+}
+@media (max-width:700px) {
+    .h1{
+      display: none;
+    }
+
+    .logoOnibus{
+      height: 70px;
+    }
+    .containerbtnHeader{
+      display: flex;
+    }
+}

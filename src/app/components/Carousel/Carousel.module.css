@@ -1,0 +1,42 @@
+.carouselContainer{
+    display: grid;
+    height: 250px;
+    background-color: #eee;
+    text-align: center;
+    margin:35px;
+    border-radius: 5px;
+    color: var(--background-blue);
+    margin-top: 25px;
+    padding: 15px;
+    gap: 1px;
+    box-shadow: 0px 0px 2px #939292;
+  
+}
+.texto {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--background-blue);
+    padding: 10px 0;
+    margin-bottom: 15px;
+  }
+  
+  .controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .dot {
+    height: 12px;
+    width: 12px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+    cursor: pointer;
+  }
+  
+  .active {
+    background-color: #717171;
+  }
+

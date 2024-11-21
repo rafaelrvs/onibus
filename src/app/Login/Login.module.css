@@ -1,0 +1,100 @@
+/* Estilo para o formulário Login */
+.headerLogin {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+.logo {
+    height: 60px;
+}
+.link {
+    align-self: flex-end;
+    color: #007BFF;
+    text-decoration: none;
+    font-size: 14px;
+}
+.link:hover {
+    text-decoration: underline;
+}
+.form {
+    position: absolute;
+    display: grid;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+}
+
+.label {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.submitButton {
+    padding: 10px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.submitButton:hover {
+    background-color: #0056b3;
+}
+
+.googleLogin {
+    text-align: center;
+}
+
+.googleButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(226, 70, 70);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    width: 100%;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.googleButton:hover {
+    background-color: #357ae8;
+}
+
+/* Responsividade para dispositivos menores */
+@media (max-width: 400px) {
+    .form {
+        width: 90%;
+    }
+    
+    .input,
+    .submitButton {
+        font-size: 14px;
+    }
+    
+}
