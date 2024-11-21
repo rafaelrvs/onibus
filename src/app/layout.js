@@ -1,5 +1,6 @@
 import localFont from "next/font/local";
 import "./globals.css";
+import Script from "next/script";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -25,6 +26,24 @@ export default function RootLayout({ children }) {
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         {children}
+        <Script
+          id="funding-choices"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function () {
+                window.__fundingChoices = window.__fundingChoices || {};
+                window.__fundingChoices.loadMessage = function () {
+                  const consentMessage = document.createElement("script");
+                  consentMessage.async = true;
+                  consentMessage.src = "https://fundingchoicesmessages.google.com/i/pub-7736006621106112?ers=1";
+                  document.head.appendChild(consentMessage);
+                };
+                window.__fundingChoices.loadMessage();
+              })();
+            `,
+          }}
+        />
       </body>
     </html>
   );
