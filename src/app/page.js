@@ -25,7 +25,9 @@ export default function Home() {
       );
       setFilteredNews(filtered);
     }
-    setIsSearchActive(true);
+
+    setIsSearchActive(true)
+    
   };
 
   useEffect(() => {
