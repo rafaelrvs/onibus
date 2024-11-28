@@ -14,7 +14,6 @@ export default function Home() {
   const [isSearchActive, setIsSearchActive] = useState(false);
   const [showCookiesBanner, setShowCookiesBanner] = useState(true);
 
-
   const handleSearch = async () => {
     if (query.trim() === "") {
       setFilteredNews(news);
@@ -82,7 +81,7 @@ export default function Home() {
               <ul>
                 <li>O primeiro ônibus a motor foi inventado em 1895 por Carl Benz, o mesmo inventor do automóvel.</li>
                 <li>Os ônibus são responsáveis por transportar cerca de 50% dos passageiros de transporte público em grandes cidades ao redor do mundo.</li>
-                <li>Os ônibus articulados, também conhecidos como "sanfona", podem ter até 25 metros de comprimento e transportar mais de 200 passageiros.</li>
+                <li>Os ônibus articulados, também conhecidos como &quot;sanfona&quot;, podem ter até 25 metros de comprimento e transportar mais de 200 passageiros.</li>
                 <li>No Brasil, o Dia do Motorista de Ônibus é comemorado em 25 de julho, celebrando esses importantes profissionais do transporte público.</li>
                 <li>Ônibus elétricos são uma alternativa sustentável e têm sido cada vez mais utilizados em várias cidades para reduzir a poluição.</li>
                 <li>Os ônibus de dois andares, famosos em Londres, começaram a circular em 1956 e se tornaram um ícone da cidade.</li>
