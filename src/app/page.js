@@ -12,6 +12,7 @@ export default function Home() {
   const [query, setQuery] = useState("");
   const [filteredNews, setFilteredNews] = useState([]);
   const [isSearchActive, setIsSearchActive] = useState(false);
+  const [showCookiesBanner, setShowCookiesBanner] = useState(true);
   const router = useRouter();
 
   const handleSearch = async () => {
@@ -26,8 +27,7 @@ export default function Home() {
       setFilteredNews(filtered);
     }
 
-    setIsSearchActive(true)
-    
+    setIsSearchActive(true);
   };
 
   useEffect(() => {
@@ -45,6 +45,18 @@ export default function Home() {
       }
     }
     fetchNews();
+  }, []);
+
+  const handleCookiesAccept = () => {
+    setShowCookiesBanner(false);
+    localStorage.setItem("cookiesAccepted", "true");
+  };
+
+  useEffect(() => {
+    const cookiesAccepted = localStorage.getItem("cookiesAccepted");
+    if (cookiesAccepted) {
+      setShowCookiesBanner(false);
+    }
   }, []);
 
   return (
@@ -108,7 +120,21 @@ export default function Home() {
               </div>
             </div>
           ))}
+          <div className={styles.privacyLinks}>
+            <Link href="/privacy-policy">Política de Privacidade</Link> | <Link href="/cookies-policy">Política de Cookies</Link>
+          </div>
         </footer>
+      )}
+
+      {showCookiesBanner && (
+        <div className={styles.cookiesBannerFixed}>
+          <p>🍪 Nós coletamos cookies para oferecer um serviço personalizado. Utilize as opções abaixo para configurar suas preferências quanto à coleta de cookies. Consulte também nossa <Link href="/cookies-policy">Política de Cookies</Link> e <Link href="/privacy-policy">Política de Privacidade</Link>.</p>
+          <div className={styles.cookiesActions}>
+            <button onClick={handleCookiesAccept} className={styles.cookiesButton}>Entendi</button>
+            <button className={styles.cookiesCustomizeButton}>Personalizar</button>
+          </div>
+          <button className={styles.cookiesCloseButton} onClick={() => setShowCookiesBanner(false)}>✖</button>
+        </div>
       )}
     </div>
   );

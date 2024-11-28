@@ -161,3 +161,92 @@
     width: 200px;
   }
 }
+/* CSS para o Banner de Cookies - Estilo Moderno */
+
+.cookiesBannerFixed {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #333;
+  color: #fff;
+  padding: 20px;
+  box-shadow: 0px -2px 10px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 1000;
+  font-family: Arial, sans-serif;
+}
+
+.cookiesBannerFixed p {
+  font-size: 14px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.cookiesActions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.cookiesButton {
+  background-color: #008cba;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.cookiesButton:hover {
+  background-color: #005f7f;
+}
+
+.cookiesCustomizeButton {
+  background-color: #4caf50;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.cookiesCustomizeButton:hover {
+  background-color: #357a38;
+}
+
+.cookiesCloseButton {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.cookiesCloseButton:hover {
+  color: #ff6666;
+}
+
+.cookiesBannerFixed a {
+  color: #00bcd4;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.cookiesBannerFixed a:hover {
+  text-decoration: underline;
+}
