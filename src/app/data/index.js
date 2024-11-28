@@ -187,5 +187,61 @@ export const textos = [
       titulo: "Canal de Denúncia - Ligue 180",
       descricao: "O Ligue 180 é um serviço gratuito que recebe denúncias de violência contra mulheres."
     },
+    {
+      titulo: "O Início do Transporte Coletivo",
+      descricao: "O conceito de transporte coletivo remonta ao século XIX, quando os primeiros \"ônibus de tração animal\" começaram a circular nas ruas de Paris e Londres. Esses ônibus eram puxados por cavalos e ofereciam um meio de transporte mais econômico e organizado para as massas."
+    },
+    {
+      titulo: "A Revolução do Ônibus a Motor",
+      descricao: "Com a invenção do motor a combustão no final do século XIX, os ônibus a motor começaram a ganhar popularidade. Em 1895, Carl Benz, o mesmo inventor do automóvel, desenvolveu um modelo de ônibus a gasolina. Essa inovação revolucionou o transporte público, proporcionando maior velocidade e capacidade de carga."
+    },
+    {
+      titulo: "Ônibus Articulados e BRT",
+      descricao: "Nos anos 1970, as grandes cidades começaram a adotar ônibus articulados, conhecidos por sua capacidade de transportar um grande número de passageiros. Durante as décadas seguintes, o conceito de Bus Rapid Transit (BRT) foi introduzido, unindo ônibus e infraestrutura exclusiva para garantir uma mobilidade urbana eficiente."
+    },
+    {
+      titulo: "O Futuro dos Ônibus: Elétricos e Autônomos",
+      descricao: "Hoje, o mercado de ônibus está se modernizando com a introdução de modelos elétricos, que ajudam a reduzir a poluição e a melhorar a sustentabilidade. Além disso, o desenvolvimento de ônibus autônomos promete transformar o futuro do transporte coletivo, oferecendo mais conforto, segurança e eficiência."
+    },
+    {
+      titulo: "Como Funcionam os Ônibus Elétricos?",
+      descricao: "Os ônibus elétricos são movidos por motores elétricos, alimentados por baterias recarregáveis. Ao contrário dos ônibus a diesel, eles não emitem gases poluentes e têm um custo de operação mais baixo, devido à menor necessidade de manutenção e ao consumo reduzido de energia."
+    },
+    {
+      titulo: "Vantagens para o Meio Ambiente",
+      descricao: "A principal vantagem dos ônibus elétricos é a redução significativa das emissões de carbono, o que contribui para a melhoria da qualidade do ar nas cidades. Além disso, esses veículos são mais silenciosos, proporcionando um ambiente urbano mais tranquilo e confortável."
+    },
+    {
+      titulo: "Desafios e Limitações",
+      descricao: "Apesar das vantagens, a transição para os ônibus elétricos enfrenta desafios. O custo inicial de aquisição de um ônibus elétrico ainda é mais alto que o de modelos a diesel, embora a economia em manutenção e combustível compense a longo prazo. Além disso, a infraestrutura de carregamento precisa ser ampliada para atender a uma frota elétrica crescente."
+    },
+    {
+      titulo: "Exemplos de Sucesso",
+      descricao: "Cidades como Londres, Los Angeles e Shenzhen estão na vanguarda da implementação de ônibus elétricos. Shenzhen, por exemplo, foi a primeira cidade do mundo a ter uma frota de ônibus totalmente elétrica. Essas iniciativas mostram como os ônibus elétricos podem ser uma solução viável e eficaz para o transporte público sustentável."
+    },
+    {
+      titulo: "O Primeiro Ônibus a Motor Foi Criado em 1895",
+      descricao: "Embora os ônibus de tração animal tenham existido desde o século XIX, o primeiro ônibus a motor foi criado em 1895, por Carl Benz, o inventor do automóvel. Esse modelo foi um marco no transporte coletivo, trazendo mais velocidade e eficiência para as cidades."
+    },
+    {
+      titulo: "Os Ônibus de Dois Andares São um Ícone em Londres",
+      descricao: "Os ônibus de dois andares, conhecidos como \"double-decker buses\", são um ícone do transporte em Londres. Eles começaram a circular na cidade em 1956 e se tornaram um símbolo cultural, sendo um dos principais pontos turísticos para os visitantes da capital inglesa."
+    },
+    {
+      titulo: "O Maior Ônibus do Mundo",
+      descricao: "O maior ônibus do mundo é um ônibus articulado usado no transporte público em Curitiba, Brasil. Com mais de 27 metros de comprimento, ele pode transportar até 300 passageiros ao mesmo tempo, tornando-se uma das maiores soluções para o transporte coletivo em cidades com alta demanda."
+    },
+    {
+      titulo: "Ônibus que Transitam por Corredores Exclusivos",
+      descricao: "Em várias cidades ao redor do mundo, os ônibus não competem com outros veículos, pois transitam por corredores exclusivos. Esse modelo, conhecido como Bus Rapid Transit (BRT), foi implementado em cidades como Bogotá, Colômbia, e Curitiba, Brasil, e tem se mostrado altamente eficaz para o transporte rápido e eficiente de grandes volumes de passageiros."
+    },
+    {
+      titulo: "A Invenção dos Ônibus Elétricos",
+      descricao: "Os primeiros ônibus elétricos surgiram no final do século XIX, mas foi só no início do século XXI que os ônibus elétricos começaram a se popularizar nas cidades, principalmente como uma solução para reduzir a poluição e o consumo de combustíveis fósseis."
+    },
+    {
+      titulo: "Ônibus com Wi-Fi e Conforto",
+      descricao: "Hoje em dia, muitos ônibus oferecem Wi-Fi gratuito para os passageiros. Além disso, o conforto a bordo também evoluiu, com assentos mais espaçosos e até sistemas de entretenimento em algumas linhas. Algumas frotas já estão equipadas com USBs e tomadas elétricas para os passageiros carregarem seus dispositivos móveis durante a viagem."
+    }
   ];
   
