@@ -13,7 +13,7 @@ export default function Home() {
   const [filteredNews, setFilteredNews] = useState([]);
   const [isSearchActive, setIsSearchActive] = useState(false);
   const [showCookiesBanner, setShowCookiesBanner] = useState(true);
-  const router = useRouter();
+
 
   const handleSearch = async () => {
     if (query.trim() === "") {
@@ -91,7 +91,6 @@ export default function Home() {
             <Carousel />
           </>
         )}
-    
         {isSearchActive && (
           <div className={styles.newsSection}>
             <h2>Resultados da Pesquisa</h2>
@@ -125,7 +124,6 @@ export default function Home() {
           </div>
         </footer>
       )}
-
       {showCookiesBanner && (
         <div className={styles.cookiesBannerFixed}>
           <p>🍪 Nós coletamos cookies para oferecer um serviço personalizado. Utilize as opções abaixo para configurar suas preferências quanto à coleta de cookies. Consulte também nossa <Link href="/cookies-policy">Política de Cookies</Link> e <Link href="/privacy-policy">Política de Privacidade</Link>.</p>
