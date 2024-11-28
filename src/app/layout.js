@@ -22,6 +22,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="pt-BR">
       <head>
+      <meta name="google-site-verification" content="BvUBcMILtkjr0ybfmjq-N--ZGHmpEpfMxhytjF8dOww" />
         <meta name="google-adsense-account" content="ca-pub-7736006621106112" />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
@@ -44,7 +45,10 @@ export default function RootLayout({ children }) {
             `,
           }}
         />
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7736006621106112"
+     crossorigin="anonymous"></script>
       </body>
+
     </html>
   );
 }
