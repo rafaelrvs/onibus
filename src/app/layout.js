@@ -22,10 +22,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="pt-BR">
       <head>
-      <link rel="icon" href="/favicon.ico" />
       <meta name="google-site-verification" content="BvUBcMILtkjr0ybfmjq-N--ZGHmpEpfMxhytjF8dOww" />
         <meta name="google-adsense-account" content="ca-pub-7736006621106112" />
-   
+      <link rel="icon" href="/favicon.ico" />
        
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>

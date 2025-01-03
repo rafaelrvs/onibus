@@ -1,56 +1,61 @@
-
+/* Header */
 .header {
   display: flex;
   align-items: center;
-  color: #fff;
-  background-color: var(--background-blue);
+  justify-content: space-between;
   height: 100px;
-  justify-content: center;
-  padding: 20px 30px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 0 30px;
+  background-color: var(--primary-color);
+  color: var(--background-color);
+  box-shadow: var(--shadow-light);
+  border-bottom: 2px solid var(--secondary-color);
 }
 
 .containerlogoEnome {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  font-size: 1.2rem;
+  justify-content: space-between;
   width: 100%;
-  padding: 0 15px;
+  font-size: 1.2rem;
 }
 
 .logoOnibus {
-  padding: 5px;
   height: 80px;
-  transition: transform 0.3s;
+  padding: 5px;
+  transition: transform var(--transition-time), filter var(--transition-time);
 }
 
 .logoOnibus:hover {
-  transform: scale(1.05);
+  transform: scale(1.1);
+  filter: brightness(1.2);
 }
 
 .h1 {
   font-size: 2rem;
-  font-weight: 600;
-  color: #f0f0f0;
+  color: var(--background-color);
+  transition: color var(--transition-time);
 }
 
+.h1:hover {
+  color: var(--highlight-color);
+}
+
+/* Search Section */
 .searchSection {
-  margin: 20px 0;
   display: flex;
   justify-content: center;
   align-items: center;
+  margin: 20px 0;
 }
 
 .searchInput {
-  padding: 10px;
   width: 300px;
+  padding: 10px;
   border: 1px solid #ccc;
-  border-radius: 5px;
-  margin-right: 10px;
+  border-radius: var(--border-radius);
   font-size: 1rem;
   outline: none;
-  transition: box-shadow 0.3s;
+  transition: box-shadow var(--transition-time);
 }
 
 .searchInput:focus {
@@ -59,194 +64,181 @@
 
 .searchButton {
   padding: 10px 20px;
-  background-color: var(--background-blue);
-  color: #fff;
+  margin-left: 10px;
   border: none;
-  border-radius: 5px;
+  border-radius: var(--border-radius);
+  background-color: var(--primary-color);
+  color: var(--background-color);
+  font-size: 1rem;
   cursor: pointer;
-  transition: background-color 0.3s;
+
+  transition: background-color var(--transition-time), transform var(--transition-time);
 }
 
 .searchButton:hover {
-  background-color: #0056b3;
+  background-color: var(--secondary-color);
+  transform: translateY(-3px);
 }
 
-.itemDica {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 15px;
-  margin: 10px auto;
-  width: 95%;
-}
-
-.containerDica {
-  margin-left: 25px;
-  cursor: pointer;
-  text-align: center;
-  width: 100%;
-  padding: 25px;
-  background-color: #fff;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  transition: transform 0.3s, box-shadow 0.3s;
-}
-
-.containerDica:hover {
-  transform: scale(1.05);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-}
-
-.curiosidadesSection {
-  padding: 30px;
-  margin-top: 30px;
-  width: 95%;
-  margin: 0 auto;
-  background-color: #f8f8f8;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.newsSection {
-  margin-top: 40px;
+/* Results Section */
+.resultsSection {
+  width: 90%;
+  margin: 20px auto;
+  background-color: var(--card-background);
   padding: 20px;
-  background-color: #f8f8f8;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-light);
+  animation: fadeIn var(--transition-time) ease-in-out;
 }
 
-.newsItem {
+.resultItem {
   margin-bottom: 20px;
   padding: 15px;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: var(--card-background);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-light);
+  transition: transform var(--transition-time), box-shadow var(--transition-time);
 }
 
-.newsItem h3 {
-  margin: 0 0 10px;
+.resultItem:hover {
+  transform: scale(1.03);
+  box-shadow: var(--shadow-dark);
+}
+
+.resultItem h3 {
   font-size: 1.5rem;
-  color: #333;
+  margin-bottom: 10px;
+  color: var(--text-color);
 }
 
-.newsItem p {
+.resultItem p {
   font-size: 1rem;
   color: #666;
 }
 
-.newsItem a {
-  color: #007bff;
-  text-decoration: none;
-  transition: color 0.3s;
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
 }
 
-.newsItem a:hover {
-  color: #0056b3;
+.pageButton {
+  margin: 0 5px;
+  padding: 10px 15px;
+  font-size: 1rem;
+  border: none;
+  border-radius: var(--border-radius);
+  background-color: var(--primary-color);
+  color: var(--background-color);
+  cursor: pointer;
+  transition: background-color var(--transition-time);
 }
 
-@media (max-width: 700px) {
-  .h1 {
-    display: none;
-  }
-
-  .logoOnibus {
-    height: 70px;
-  }
-
-  .containerbtnHeader {
-    display: flex;
-  }
-
-  .searchInput {
-    width: 200px;
-  }
+.pageButton:hover {
+  background-color: var(--secondary-color);
 }
-/* CSS para o Banner de Cookies - Estilo Moderno */
 
+.pageButton:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+.curiosidadesSection{
+  padding-left: 35px;
+}
+.footer{
+  padding: 15px;
+ width: 95%;
+ margin: 0 auto;
+  text-align: start;
+
+}
+
+.containerDica{
+  padding: 25px 0px 25px;
+}
+/* Cookies Banner */
 .cookiesBannerFixed {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: #333;
-  color: #fff;
-  padding: 20px;
-  box-shadow: 0px -2px 10px rgba(0, 0, 0, 0.3);
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 20px;
+  background-color: var(--cookie-background);
+  color: var(--background-color);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-dark);
   z-index: 1000;
-  font-family: Arial, sans-serif;
 }
 
 .cookiesBannerFixed p {
+  text-align: center;
   font-size: 14px;
   margin-bottom: 10px;
-  text-align: center;
 }
 
 .cookiesActions {
   display: flex;
   justify-content: center;
   gap: 10px;
-  margin-top: 10px;
+}
+
+.cookiesButton, .cookiesCustomizeButton {
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: var(--border-radius);
+  border: none;
+  cursor: pointer;
+  transition: background-color var(--transition-time), transform var(--transition-time);
 }
 
 .cookiesButton {
-  background-color: #008cba;
-  border: none;
+  background-color: var(--highlight-color);
   color: white;
-  padding: 10px 20px;
-  text-align: center;
-  font-size: 14px;
-  font-weight: bold;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
 }
 
 .cookiesButton:hover {
-  background-color: #005f7f;
+  transform: translateY(-3px);
+  background-color: var(--button-hover-color);
 }
 
 .cookiesCustomizeButton {
   background-color: #4caf50;
-  border: none;
   color: white;
-  padding: 10px 20px;
-  text-align: center;
-  font-size: 14px;
-  font-weight: bold;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
 }
 
 .cookiesCustomizeButton:hover {
+  transform: translateY(-3px);
   background-color: #357a38;
 }
 
-.cookiesCloseButton {
-  position: absolute;
-  top: 10px;
-  right: 20px;
-  background: none;
-  border: none;
-  color: #fff;
-  font-size: 20px;
-  cursor: pointer;
+/* Responsividade */
+@media (max-width: 700px) {
+  .h1 {
+    font-size: 1.5rem;
+  }
+
+  .searchInput {
+    width: 200px;
+  }
+
+  .logoOnibus {
+    height: 60px;
+  }
 }
 
-.cookiesCloseButton:hover {
-  color: #ff6666;
-}
-
-.cookiesBannerFixed a {
-  color: #00bcd4;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-.cookiesBannerFixed a:hover {
-  text-decoration: underline;
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
