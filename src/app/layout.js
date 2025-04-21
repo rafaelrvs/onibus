@@ -15,18 +15,23 @@ const geistMono = localFont({
 
 export const metadata = {
   title: "Pega o Bus Aí - Consulta de Horários de Ônibus",
-  description: "Com o app Pega o Bus Aí, consulte os horários de ônibus em tempo real, visualize rotas e receba alertas sobre a chegada e partida de ônibus na sua cidade. Planeje sua viagem, evite atrasos e saiba tudo sobre as linhas de transporte público. Não perca mais tempo esperando na parada!",
+  description:
+    "Com o app Pega o Bus Aí, consulte os horários de ônibus em tempo real, visualize rotas e receba alertas sobre a chegada e partida de ônibus na sua cidade. Planeje sua viagem, evite atrasos e saiba tudo sobre as linhas de transporte público. Não perca mais tempo esperando na parada!",
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="pt-BR">
-      <head>
-
-      <link rel="icon" href="/favicon.ico" />
-       
-      </head>
+    <html lang="pt-BR"
+    className={`${geistSans.variable} ${geistMono.variable}`}>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
+      <Script
+          strategy="afterInteractive"
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9552697386011881"
+          crossOrigin="anonymous"
+        />
         {children}
       </body>
 
