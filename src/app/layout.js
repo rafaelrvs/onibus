@@ -24,17 +24,22 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="pt-BR"
-    className={`${geistSans.variable} ${geistMono.variable}`}>
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
-      <Script
+    <html lang="pt-BR" className={`${geistSans.variable} ${geistMono.variable}`}>
+      <head>
+   
+        <meta charSet="utf-8" />
+       
+        <link rel="icon" href="/favicon.ico" />
+      </head>
+      <body>
+  
+        <Script
           strategy="afterInteractive"
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9552697386011881"
           crossOrigin="anonymous"
         />
         {children}
       </body>
-
     </html>
   );
 }
