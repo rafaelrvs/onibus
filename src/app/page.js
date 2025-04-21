@@ -4,14 +4,13 @@ import ModalFormsOnibus from "./components/ModalFormsOnibus";
 import styles from "./page.module.css";
 import Link from "next/link";
 import { textos } from "./data"; // Importando os textos
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function Home() {
   const [query, setQuery] = useState("");
   const [filteredTextos, setFilteredTextos] = useState([]);
   const [isSearchActive, setIsSearchActive] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [showCookiesBanner, setShowCookiesBanner] = useState(true);
 
   const itemsPerPage = 5; // Número máximo de itens por página
 
@@ -33,20 +32,7 @@ export default function Home() {
 
     setFilteredTextos(sortedFiltered);
     setIsSearchActive(true);
-    setCurrentPage(1); // Reinicia para a primeira página após a busca
-  };
-
-  // Função para aceitar cookies
-  useEffect(() => {
-    const cookiesAccepted = localStorage.getItem("cookiesAccepted");
-    if (cookiesAccepted) {
-      setShowCookiesBanner(false);
-    }
-  }, []);
-
-  const handleCookiesAccept = () => {
-    setShowCookiesBanner(false);
-    localStorage.setItem("cookiesAccepted", "true");
+    setCurrentPage(1);
   };
 
   // Paginação
@@ -68,7 +54,6 @@ export default function Home() {
             />
           </Link>
           <h1 className={styles.h1}>Pega o Bus AI</h1>
-          
         </div>
       </header>
 
@@ -134,7 +119,9 @@ export default function Home() {
             <div className={styles.curiosidadesSection}>
               <h2>Curiosidades Sobre Ônibus</h2>
               <ul>
-                {[ /* Suas curiosidades aqui */ ].map((curiosity, index) => (
+                {[
+                  /* Suas curiosidades aqui */
+                ].map((curiosity, index) => (
                   <li key={index}>{curiosity}</li>
                 ))}
               </ul>
@@ -146,10 +133,10 @@ export default function Home() {
 
       {/* Footer */}
       <footer className={styles.footer}>
-      <iframe width="auto" height="365" src="https://www.youtube.com/embed/FUFxiPFcG58?si=keGPT0ob1cUqF5Lf" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-   <br/>
-   <br/>
-    <h2>Dicas</h2>
+        
+        <br />
+        <br />
+        <h2>Dicas</h2>
         {textos.map((item, key) => (
           <div key={key} className={styles.itemDica}>
             <div className={styles.containerDica}>
@@ -157,38 +144,7 @@ export default function Home() {
             </div>
           </div>
         ))}
-        <div className={styles.privacyLinks}>
-          <Link href="/cookiespolicy">Política de Privacidade</Link> |{" "}
-          <Link href="/cookiespolicy">Política de Cookies</Link>
-        </div>
       </footer>
-
-      {/* Cookies Banner */}
-      {showCookiesBanner && (
-        <div className={styles.cookiesBannerFixed}>
-          <p>
-            🍪 Nós coletamos cookies para oferecer um serviço personalizado.
-            Consulte nossa <Link href="/cookies-policy">Política de Cookies</Link>{" "}
-            e{" "}
-            <Link href="/privacy-policy">Política de Privacidade</Link>.
-          </p>
-          <div className={styles.cookiesActions}>
-            <button
-              onClick={handleCookiesAccept}
-              className={styles.cookiesButton}
-            >
-              Entendi
-            </button>
-            <button className={styles.cookiesCustomizeButton}>Personalizar</button>
-          </div>
-          <button
-            className={styles.cookiesCloseButton}
-            onClick={() => setShowCookiesBanner(false)}
-          >
-            ✖
-          </button>
-        </div>
-      )}
     </div>
   );
 }

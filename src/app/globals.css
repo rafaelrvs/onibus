@@ -19,7 +19,29 @@
   --white: #ffffff;
 }
 
+/* Variáveis de tema (defina em :root ou em arquivo de variáveis) */
+:root {
+  --primary-color: #007bff;
+  --secondary-color: #0056b3;
+  --highlight-color: #ffc107;
+  --background-color: #ffffff;
+  --text-color: #333333;
+  --card-background: #f9f9f9;
+  --cookie-background: rgba(0, 0, 0, 0.8);
+  --border-radius: 8px;
+  --transition-time: 0.3s;
+  --shadow-light: 0 2px 6px rgba(0, 0, 0, 0.1);
+  --shadow-dark: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
 
+/* Reset básico e box-sizing */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
 /* Global Styles */
 body {

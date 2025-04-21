@@ -22,33 +22,12 @@ export default function RootLayout({ children }) {
   return (
     <html lang="pt-BR">
       <head>
-      <meta name="google-site-verification" content="BvUBcMILtkjr0ybfmjq-N--ZGHmpEpfMxhytjF8dOww" />
-        <meta name="google-adsense-account" content="ca-pub-7736006621106112" />
+
       <link rel="icon" href="/favicon.ico" />
        
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         {children}
-        <Script
-          id="funding-choices"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function () {
-                window.__fundingChoices = window.__fundingChoices || {};
-                window.__fundingChoices.loadMessage = function () {
-                  const consentMessage = document.createElement("script");
-                  consentMessage.async = true;
-                  consentMessage.src = "https://fundingchoicesmessages.google.com/i/pub-7736006621106112?ers=1";
-                  document.head.appendChild(consentMessage);
-                };
-                window.__fundingChoices.loadMessage();
-              })();
-            `,
-          }}
-        />
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7736006621106112"
-     crossorigin="anonymous"></script>
       </body>
 
     </html>

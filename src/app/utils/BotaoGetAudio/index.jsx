@@ -3,67 +3,63 @@ import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { urlTSS } from "../urls";
 
-function BotaoGetAudio({ text }) {
+export default function BotaoGetAudio({ text }) {
   const [audioSrc, setAudioSrc] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  const audioRef = useRef(null); // Referência para o elemento <audio>
+  const audioRef = useRef(null);
 
-  // useEffect para atualizar o áudio automaticamente sempre que o texto mudar
+  // Gera novo áudio sempre que o text mudar
   useEffect(() => {
-    if (text && text.trim() !== "" && text !== audioSrc) {
+    if (text?.trim() && text !== audioSrc) {
       gerarAudio(text);
     }
-  }, [text]); // Observa mudanças no `text`
+  }, [text]);
 
-  // useEffect para reproduzir automaticamente quando a fonte do áudio é alterada
-  useEffect(() => {
-    if (audioSrc && audioRef.current) {
-      audioRef.current.load(); // Recarregar a fonte do áudio
-      audioRef.current.play().catch((error) => {
-        console.error("Erro ao reproduzir o áudio automaticamente:", error);
-      });
-    }
-  }, [audioSrc]);
-
-  const gerarAudio = async (text) => {
+  const gerarAudio = async (txt) => {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await axios.post(
-        urlTSS + "/synthesize",
-        { text: text.substring(0, 1000) },
-        {
-          responseType: "blob",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
+      const { data } = await axios.post(
+        `${urlTSS}/synthesize`,
+        { text: txt.substring(0, 1000) },
+        { responseType: "blob" }
       );
-      const audioURL = URL.createObjectURL(response.data);
-      setAudioSrc(audioURL);
+      const url = URL.createObjectURL(data);
+      setAudioSrc(url);
     } catch (e) {
       console.error("Erro ao gerar áudio:", e);
-      setError("Erro ao gerar áudio. Tente novamente mais tarde.");
+      setError("Não foi possível gerar o áudio.");
     } finally {
       setIsLoading(false);
     }
   };
 
+  const handlePlay = () => {
+    if (!audioRef.current) return;
+    audioRef.current
+      .play()
+      .catch((e) => console.error("Play impedido:", e));
+  };
+
   return (
     <div>
-      {audioSrc ? (
-        <audio ref={audioRef} key={audioSrc} controls autoPlay>
-          <source src={audioSrc} type="audio/mpeg" />
-          Seu navegador não suporta o elemento de áudio.
-        </audio>
-      ) : error ? (
-        <p className="text-red-500">{error}</p>
-      ) : (
-        isLoading && <p>Carregando...</p>
+      {isLoading && <p>Carregando áudio…</p>}
+      {error && <p className="text-red-500">{error}</p>}
+
+      {audioSrc && (
+        <div>
+          <audio ref={audioRef} controls src={audioSrc}>
+            Seu navegador não suporta áudio.
+          </audio>
+          <button
+            onClick={handlePlay}
+            className="mt-2 px-4 py-2 bg-blue-600 text-white rounded"
+          >
+            ▶️ Tocar Áudio
+          </button>
+        </div>
       )}
     </div>
   );
 }
-
-export default BotaoGetAudio;
