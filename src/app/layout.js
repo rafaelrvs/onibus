@@ -35,7 +35,7 @@ export default function RootLayout({ children }) {
         
         {/* snippet SSR para o crawler do AdSense */}
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
-          data-ad-client="ca-pub-773600662110611" crossorigin="anonymous"></script>
+          data-ad-client="ca-pub-7736006621106112" crossorigin="anonymous"></script>
         <link rel="icon" href="/favicon.ico" />
       </head>
       <body>

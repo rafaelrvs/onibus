@@ -6,7 +6,7 @@ export default function Head() {
       <script
         async
         src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
-        data-ad-client="ca-pub-773600662110611"
+        data-ad-client="ca-pub-7736006621106112"
         crossOrigin="anonymous"
       ></script>
     </>
