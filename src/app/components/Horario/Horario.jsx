@@ -140,7 +140,7 @@ export default function Horario() {
       )}
 
       {/* Ver todos os horários (JSON) */}
-      <div className={styles.verTodos}>
+      {/* <div className={styles.verTodos}>
         <a
           href={`/api/horarios/${selectedLinha}`}
           target="_blank"
@@ -149,7 +149,7 @@ export default function Horario() {
         >
           Ver todos os horários (JSON)
         </a>
-      </div>
+      </div> */}
     </div>
   );
 }
