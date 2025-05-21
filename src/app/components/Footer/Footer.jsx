@@ -26,7 +26,7 @@ export default function Footer() {
         <Home size={24} />
         <span>Início</span>
       </div>
-
+{/* 
       <div
         className={`${styles.item} ${activeTab === 'viagens' ? styles.active : ''}`}
         onClick={() => handleClick('viagens', '/viagens')}
@@ -41,7 +41,7 @@ export default function Footer() {
       >
         <User size={24} />
         <span>Perfil</span>
-      </div>
+      </div> */}
     </footer>
   )
 }

@@ -52,9 +52,9 @@ export default function RootLayout({ children }) {
      data-ad-format="autorelaxed"
      data-ad-client="ca-pub-7736006621106112"
      data-ad-slot="4570844947"></ins>
-<script>
+{/* <script>
      (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
+</script> */}
       </body>
     </html>
   )
