@@ -6,6 +6,12 @@
   box-shadow: 0 1px 4px rgba(0,0,0,0.1);
 }
 
+/* Input padrão do site */
+.selectLinha {
+  max-width: 200px;
+  margin-left: 8px;
+}
+
 /* Abas */
 .tabs {
   display: flex;
@@ -69,6 +75,24 @@
   color: #333;
 }
 
+/* Spinner */
+.spinnerContainer {
+  display: flex;
+  justify-content: center;
+  margin: 16px 0;
+}
+.spinner {
+  border: 4px solid rgba(0,0,0,0.1);
+  border-top: 4px solid #0052CC;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
 /* Botão ver todos */
 .verTodos {
   width: 100%;
@@ -79,4 +103,9 @@
   padding: 12px 0;
   font-size: 16px;
   cursor: pointer;
+  text-align: center;
+}
+.verTodos .link {
+  color: #fff;
+  text-decoration: none;
 }

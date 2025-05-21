@@ -1,13 +1,19 @@
-// src/app/components/Horario/Horario.jsx
-'use client';
 
 import React, { useEffect, useState } from 'react';
 import styles from './Horario.module.css';
 
 export default function Horario() {
   const [aba, setAba] = useState('diasUteis');        // 'diasUteis' | 'sabados' | 'domingos'
-  const [sentido, setSentido] = useState('Terminal → Centro');
-  const [linhas, setLinhas] = useState([]);           // aqui guardamos os números de linha
+  const [sentido, setSentido] = useState('a');         // 'a' = partida_a | 'b' = partida_b
+  const [linhas, setLinhas] = useState([]);
+  const [selectedLinha, setSelectedLinha] = useState('');
+  const [horariosData, setHorariosData] = useState({
+    diasUteis: [],
+    sabados: [],
+    domingos: []
+  });
+  const [loading, setLoading] = useState(true); // inicia carregando
+  const [error, setError] = useState(null);
 
   const tabs = [
     { key: 'diasUteis', label: 'Dias Úteis' },
@@ -15,48 +21,76 @@ export default function Horario() {
     { key: 'domingos',  label: 'Domingos' }
   ];
 
-  const horarios = {
-    diasUteis: ['05:30','06:00','06:30','07:00','07:30','08:00','08:30','09:00','09:30'],
-    sabados:   ['06:00','06:30','07:00','07:30','08:00','08:30','09:00','09:30'],
-    domingos:  ['07:00','07:30','08:00','08:30','09:00','09:30']
-  };
-
-  // Dispara a busca das linhas só uma vez, ao montar o componente
+  // 1️⃣ Busca todas as linhas ao montar
   useEffect(() => {
     async function fetchLinhas() {
       try {
-        // Aponta para o seu endpoint interno (criado em app/api/linhas/route.js)
         const res = await fetch('/api/linhas');
         if (!res.ok) throw new Error('Erro ao buscar linhas');
         const data = await res.json();
-        // Extrai apenas o número de cada linha
-        setLinhas(data.linhas.map(item => item.linha));
+        const codigos = data.linhas.map(item => item.linha);
+        setLinhas(codigos);
+        if (codigos.length) setSelectedLinha(codigos[0]);
       } catch (err) {
-        console.error('Erro ao buscar linhas:', err);
+        console.error(err);
+        setError('Não foi possível carregar as linhas.');
       }
     }
     fetchLinhas();
-  }, []);  // array de deps vazio: roda apenas no mount
+  }, []);
+
+  // 2️⃣ Busca horários sempre que mudar a linha
+  useEffect(() => {
+    if (!selectedLinha) return;
+    async function fetchHorarios() {
+      setLoading(true);
+      setError(null);
+      try {
+        const res = await fetch(`/api/horarios/${selectedLinha}`);
+        if (!res.ok) throw new Error('Erro ao buscar horários');
+        const data = await res.json();
+        setHorariosData({
+          diasUteis: data.diasUteis || [],
+          sabados:   data.sabados   || [],
+          domingos:  data.domingos  || []
+        });
+      } catch (err) {
+        console.error(err);
+        setError('Não foi possível carregar os horários.');
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchHorarios();
+  }, [selectedLinha]);
 
   function trocarSentido() {
-    setSentido(prev =>
-      prev === 'Terminal → Centro'
-        ? 'Centro → Terminal'
-        : 'Terminal → Centro'
-    );
+    setSentido(prev => (prev === 'a' ? 'b' : 'a'));
   }
 
   return (
     <div className={styles.container}>
-      {/* --- Linhas carregadas --- */}
+      {/* Seleção de linha */}
       {linhas.length > 0 && (
         <div className={styles.linhasDisponiveis}>
-          <strong>Linhas disponíveis:</strong>{' '}
-          {linhas.join(', ')}
+          <strong>Selecione ou digite a linha:</strong>{' '}
+          <input
+            type="text"
+            list="linhas-list"
+            value={selectedLinha}
+            onChange={e => setSelectedLinha(e.target.value.toUpperCase())}
+            className={`form-control ${styles.selectLinha}`}
+            placeholder="Ex: C002A"
+          />
+          <datalist id="linhas-list">
+            {linhas.map(l => (
+              <option key={l} value={l} />
+            ))}
+          </datalist>
         </div>
       )}
 
-      {/* --- Abas de dias --- */}
+      {/* Abas de dias */}
       <div className={styles.tabs}>
         {tabs.map(t => (
           <button
@@ -69,27 +103,53 @@ export default function Horario() {
         ))}
       </div>
 
-      {/* --- Sentido --- */}
+      {/* Sentido */}
       <div className={styles.sentido}>
-        <span>Sentido: {sentido}</span>
+        <span>
+          <strong>Sentido:</strong>{' '}
+          {sentido === 'a'
+            ? 'Terminal → Centro'
+            : 'Centro → Terminal'}
+        </span>
         <button onClick={trocarSentido} className={styles.link}>
           Ver outro sentido
         </button>
       </div>
 
-      {/* --- Grade de horários --- */}
-      <div className={styles.grade}>
-        {horarios[aba].map(h => (
-          <div key={h} className={styles.item}>
-            {h}
-          </div>
-        ))}
-      </div>
+      {/* Grade de horários */}
+      {loading ? (
+        <div className={styles.spinnerContainer}>
+          <div className={styles.spinner} aria-label="Carregando" />
+        </div>
+      ) : error ? (
+        <p className={styles.error}>{error}</p>
+      ) : (
+        <div className={styles.grade}>
+          {horariosData[aba]
+            .map((entry, idx) => {
+              const hora = typeof entry === 'string'
+                ? entry
+                : entry.hora;
+              return (
+                <div key={idx} className={styles.item}>
+                  {hora}
+                </div>
+              );
+            })}
+        </div>
+      )}
 
-      {/* --- Botão ver todos --- */}
-      <button className={styles.verTodos}>
-        Ver todos os horários
-      </button>
+      {/* Ver todos os horários (JSON) */}
+      <div className={styles.verTodos}>
+        <a
+          href={`/api/horarios/${selectedLinha}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={styles.link}
+        >
+          Ver todos os horários (JSON)
+        </a>
+      </div>
     </div>
   );
 }
