@@ -24,4 +24,5 @@
     "eslint": "^9.15.0",
     "eslint-config-next": "15.0.3"
   }
+  
 }
