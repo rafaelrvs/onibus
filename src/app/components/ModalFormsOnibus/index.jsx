@@ -1,108 +1,102 @@
-import React, { useEffect, useState } from 'react';
-import styles from './ModalForms.module.css';
-import { linhasOnibus } from '@/app/data/linhasOnibus';
-import { ativaFrame } from '@/app/data/utils';
-import mapa from '@/app/data/mapa';
-import axios from 'axios';
-import BotaoGetAudio from '@/app/utils/BotaoGetAudio';
+"use client";
+import React, { useState, useEffect, useCallback } from "react";
+import styles from "./ModalForms.module.css";
+import { linhasOnibus } from "@/app/data/linhasOnibus";
+import { ativaFrame } from "@/app/data/utils";
+import mapa from "@/app/data/mapa";
+import axios from "axios";
+import BotaoGetAudio from "@/app/utils/BotaoGetAudio";
 
 const LoadingSpinner = () => (
   <div className={styles.loadingSpinner}></div>
 );
 
-const ModalFormsOnibus = () => {
-  const [inputPesquisa, setInputPesquisa] = useState('C002B'); // Valor padrão da linha
-  const [onibus, setOnibus] = useState('');
-  const [result, setResult] = useState('');
-  const [linkframe, setLinkframe] = useState('');
-  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+export default function ModalFormsOnibus() {
+  const [inputPesquisa, setInputPesquisa] = useState("C002B");
+  const [onibus, setOnibus] = useState("");
+  const [result, setResult] = useState("");
+  const [linkframe, setLinkframe] = useState("");
+  const [isButtonDisabled] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const dataAtual = new Date().toLocaleTimeString();
 
-  // Dispara a busca automaticamente ao carregar a página
+  // 1) Memoizamos toda a lógica de busca
+  const handleSearch = useCallback(async (linha) => {
+    setIsLoading(true);
+    try {
+      // Insere o ônibus
+      const found = linhasOnibus.find((item) => {
+        const [codigo] = item.split(" - ");
+        return codigo.trim().toUpperCase() === linha.trim().toUpperCase();
+      });
+      if (found) {
+        setOnibus(found);
+      } else {
+        setResult("Nenhuma linha encontrada.");
+        return;
+      }
+
+      // Atualiza o frame do mapa
+      ativaFrame(linha, mapa, setLinkframe);
+
+      // Busca horários
+      const { data } = await axios.get(
+        `https://api-bus-g6pv.onrender.com/escolhaOnibus?codigo=${linha}`
+      );
+      if (!data.horarios || Object.keys(data.horarios).length === 0) {
+        setResult("Horários não encontrados.");
+        return;
+      }
+
+      setResult("Consultando o próximo horário de ônibus...");
+
+      // Envia para análise
+      const { data: analyzeData } = await axios.post(
+        "https://api-bus-g6pv.onrender.com/analyze",
+        {
+          codigo: linha,
+          horarios: data.horarios,
+          horarioAgora: new Date().toLocaleTimeString(),
+        }
+      );
+      setResult(analyzeData?.resposta || "Resposta não encontrada");
+    } catch (err) {
+      setResult("Erro ao processar a solicitação.");
+    } finally {
+      setIsLoading(false);
+    }
+  }, []); // nenhum state interno varia — imports e setters do React são estáveis
+
+  // 2) Efeito dispara só quando `inputPesquisa` (ou `handleSearch`) muda
   useEffect(() => {
     if (inputPesquisa) {
       handleSearch(inputPesquisa);
     }
-  }, [inputPesquisa]);
+  }, [inputPesquisa, handleSearch]);
 
   const handleSelectChange = (e) => {
-    const [codigo] = e.target.value.split('-');
+    const [codigo] = e.target.value.split(" - ");
     setInputPesquisa(codigo.trim());
   };
 
-  const handleSearch = async (linha) => {
-    setIsLoading(true);
-
-    try {
-      insereOnibus(linha);
-      ativaFrame(linha, mapa, setLinkframe);
-
-      const response = await axios.get(
-        `https://api-bus-g6pv.onrender.com/escolhaOnibus?codigo=${linha}`
-      );
-      const data = response.data;
-      await enviaParaServidor(data);
-    } catch (error) {
-      setResult('Não possui cadastro de horários. Quer consultar outros ônibus?');
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const insereOnibus = (linha) => {
-    const resultado = linhasOnibus.find((item) => {
-      const [codigo, nomeOnibus] = item.split(' - ');
-      return codigo.trim().toUpperCase() === linha.trim().toUpperCase();
-    });
-
-    if (resultado) {
-      setOnibus(resultado);
-    } else {
-      setResult('Nenhuma linha encontrada.');
-    }
-  };
-
   const handleButtonClick = () => {
-    if (inputPesquisa === 'Selecione a linha de ônibus' || inputPesquisa.trim() === '') {
-      alert('Por favor, selecione o código da linha de ônibus.');
+    if (!inputPesquisa) {
+      alert("Por favor, selecione o código da linha de ônibus.");
       return;
     }
-
     handleSearch(inputPesquisa);
-  };
-
-  const enviaParaServidor = async (dados) => {
-    if (!dados.horarios || Object.keys(dados.horarios).length === 0) {
-      setResult('Horários não encontrados.');
-      return;
-    }
-
-    setResult('Consultando o próximo horário de ônibus...');
-
-    try {
-      const response = await axios.post('https://api-bus-g6pv.onrender.com/analyze', {
-        codigo: inputPesquisa,
-        horarios: dados.horarios,
-        horarioAgora: dataAtual,
-      });
-      const resposta = response.data?.resposta || 'Resposta não encontrada';
-      setResult(resposta);
-    } catch (error) {
-      setResult('Erro ao processar a solicitação.');
-    }
   };
 
   return (
     <div className={styles.ModalFormChat}>
       <h1 className={styles.containerTitleModal}>Consulte seu Ônibus</h1>
       <div className={styles.containerBtnModal}>
-        <select className={styles.option} onChange={handleSelectChange} value={inputPesquisa}>
-          <option className={styles.option} value="">
-            {inputPesquisa}
-          </option>
-          {linhasOnibus.map((linha, index) => (
-            <option key={index} value={linha}>
+        <select
+          className={styles.option}
+          onChange={handleSelectChange}
+          value={inputPesquisa}
+        >
+          {linhasOnibus.map((linha, idx) => (
+            <option key={idx} value={linha}>
               {linha}
             </option>
           ))}
@@ -111,27 +105,30 @@ const ModalFormsOnibus = () => {
         <div className={styles.Result}>
           {isLoading ? <LoadingSpinner /> : <p>{result}</p>}
         </div>
+
         <BotaoGetAudio text={result} />
+
         <input
-          onClick={handleButtonClick}
-          className={
-            isButtonDisabled ? styles.buttonConsultarDisable : styles.buttonConsultar
-          }
           type="button"
           value="Buscar"
           disabled={isButtonDisabled}
+          className={
+            isButtonDisabled
+              ? styles.buttonConsultarDisable
+              : styles.buttonConsultar
+          }
+          onClick={handleButtonClick}
         />
+
         {linkframe && (
           <iframe
             className={styles.frame}
             src={linkframe}
             frameBorder="0"
             title="Mapa do ônibus"
-          ></iframe>
+          />
         )}
       </div>
     </div>
   );
-};
-
-export default ModalFormsOnibus;
+}

@@ -1,0 +1,127 @@
+/* components/Main.module.css */
+.main {
+  padding: 16px;
+}
+
+/* Search */
+.searchContainer {
+  display: flex;
+  align-items: center;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  padding: 8px;
+  margin-bottom: 16px;
+}
+.searchIcon {
+  width: 20px;
+  height: 20px;
+  color: #888;
+  margin-right: 8px;
+}
+.searchInput {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-size: 16px;
+  outline: none;
+}
+.searchButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #0052cc;
+}
+
+/* Tabs */
+.nav {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 16px;
+  border-bottom: 1px solid #e0e0e0;
+}
+.navItem {
+  flex: 1;
+  background: none;
+  border: none;
+  padding: 8px 0;
+  text-align: center;
+  color: #888;
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+}
+.navItem span {
+  margin-top: 4px;
+}
+.active {
+  color: #0052cc;
+}
+
+/* Linhas Populares */
+.popularSection {}
+.sectionTitle {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+.lineList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  
+}
+.lineCard {
+  display: flex;
+  align-items: center;
+  background: #fff;
+ 
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  
+}
+.lineCard {
+  /* já existente… */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.lineCard:hover {
+  transform: scale(1.00);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+.lineIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #fff;
+  font-weight: 600;
+  margin-right: 12px;
+}
+.lineInfo {
+  flex: 1;
+}
+.lineTitle {
+  margin: 0;
+  font-size: 16px;
+  color: #333;
+  font-weight: 500;
+}
+.lineVia {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: #666;
+}
+.lineEta {
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 12px;
+}

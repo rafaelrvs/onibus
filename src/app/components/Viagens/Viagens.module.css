@@ -1,0 +1,67 @@
+/* src/app/components/Viagens/Viagens.module.css */
+.container {
+  padding: 16px;
+}
+.title {
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #333;
+}
+.icon {
+  margin-right: 8px;
+  color: #0052CC;
+}
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  margin-bottom: 12px;
+  transition: transform 0.2s ease;
+}
+.card:hover {
+  transform: scale(1.02);
+}
+.info {
+  display: flex;
+  flex-direction: column;
+}
+.line {
+  font-size: 16px;
+  font-weight: 500;
+  color: #111;
+}
+.time {
+  font-size: 14px;
+  color: #666;
+}
+.status {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 12px;
+  text-transform: uppercase;
+}
+.status.emandamento {
+  background: #E6F4EA;
+  color: #28A745;
+}
+.status.agendada {
+  background: #E8F0FE;
+  color: #0052CC;
+}
+.status.concluida {
+  background: #FFF9E6;
+  color: #FFC107;
+}

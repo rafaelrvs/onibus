@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import axios from "axios";
 import { urlTSS } from "../urls";
 
@@ -9,14 +9,8 @@ export default function BotaoGetAudio({ text }) {
   const [error, setError] = useState(null);
   const audioRef = useRef(null);
 
-  // Gera novo áudio sempre que o text mudar
-  useEffect(() => {
-    if (text?.trim() && text !== audioSrc) {
-      gerarAudio(text);
-    }
-  }, [text]);
-
-  const gerarAudio = async (txt) => {
+  // 1) Memoizamos gerarAudio pra tê-lo estável nas deps
+  const gerarAudio = useCallback(async (txt) => {
     setIsLoading(true);
     setError(null);
     try {
@@ -33,13 +27,18 @@ export default function BotaoGetAudio({ text }) {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
+
+  // 2) Efeito dispara sempre que text mudar
+  useEffect(() => {
+    if (text?.trim()) {
+      gerarAudio(text);
+    }
+  }, [text, gerarAudio]);
 
   const handlePlay = () => {
     if (!audioRef.current) return;
-    audioRef.current
-      .play()
-      .catch((e) => console.error("Play impedido:", e));
+    audioRef.current.play().catch((e) => console.error("Play impedido:", e));
   };
 
   return (

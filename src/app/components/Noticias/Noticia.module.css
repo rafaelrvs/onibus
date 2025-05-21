@@ -1,0 +1,83 @@
+/* src/app/components/Noticias/Noticia.module.css */
+
+.container {
+  padding: 16px;
+  background: #fff;
+  border-radius: 8px;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #333;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.card {
+  display: flex;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.iconWrapper {
+  flex: 0 0 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+}
+
+.content {
+  flex: 1;
+  padding: 12px;
+}
+
+.type {
+  font-size: 12px;
+  font-weight: 500;
+  color: #0052CC;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.newsTitle {
+  font-size: 16px;
+  margin: 0;
+  color: #111;
+}
+
+.newsDesc {
+  font-size: 14px;
+  color: #555;
+  margin: 4px 0 8px;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.date {
+  font-size: 12px;
+  color: #888;
+}
+
+.readMore {
+  font-size: 12px;
+  color: #0052CC;
+  text-decoration: none;
+}
+
+.readMore:hover {
+  text-decoration: underline;
+}

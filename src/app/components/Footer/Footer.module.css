@@ -1,0 +1,45 @@
+/* components/Footer.module.css */
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  display: flex;
+  background-color: #fff;
+  border-top: 1px solid #e0e0e0;
+  box-shadow: 0 -1px 4px rgba(0, 0, 0, 0.1);
+}
+
+.item {
+  flex: 1;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #888;           /* cinza padrão */
+  text-decoration: none;
+  font-size: 12px;
+  transition: color 0.2s;
+}
+
+.item span {
+  margin-top: 4px;
+}
+
+/* estado ativo */
+.active {
+  color: #0052CC;        /* azul para ícone e texto */
+}
+
+.active::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 25%;
+  width: 50%;
+  height: 3px;
+  background-color: #6F42C1; /* linha roxa por baixo */
+  border-radius: 2px 2px 0 0;
+}

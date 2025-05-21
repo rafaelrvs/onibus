@@ -1,18 +1,18 @@
 // app/layout.tsx
-import localFont from "next/font/local";
-import "./globals.css";
-import { ReactNode } from "react";
+import localFont from "next/font/local"
+import "./globals.css"
+import { GlobalProvider } from "../Context/globalContext"
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
   weight: "100 900",
-});
+})
 const geistMono = localFont({
   src: "./fonts/GeistMonoVF.woff",
   variable: "--font-geist-mono",
   weight: "100 900",
-});
+})
 
 export const metadata = {
   title: "Pega o Bus Aí - Consulta de Horários de Ônibus",
@@ -22,25 +22,27 @@ export const metadata = {
     icon: "/favicon.ico",
     shortcut: "/favicon.ico",
   },
-};
+}
 
 export default function RootLayout({ children }) {
   return (
-    <html
-      lang="pt-BR"
-      className={`${geistSans.variable} ${geistMono.variable}`}
-    >
+    <html lang="pt-BR" className={`${geistSans.variable} ${geistMono.variable}`}> 
       <head>
         <meta charSet="utf-8" />
-        
         {/* snippet SSR para o crawler do AdSense */}
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
-          data-ad-client="ca-pub-7736006621106112" crossorigin="anonymous"></script>
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+          data-ad-client="ca-pub-7736006621106112"
+          crossOrigin="anonymous"
+        />
         <link rel="icon" href="/favicon.ico" />
       </head>
       <body>
-        {children}
+        <GlobalProvider>
+          {children}
+        </GlobalProvider>
       </body>
     </html>
-  );
+  )
 }

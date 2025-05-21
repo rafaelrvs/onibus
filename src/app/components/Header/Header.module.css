@@ -1,0 +1,40 @@
+/* components/Header.module.css */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #0052CC;     /* azul forte */
+  padding: 0 16px;
+  height: 56px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  width: 32px;
+  height: 32px;
+  margin-right: 12px;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #FFF;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+}
+
+.icon {
+  width: 24px;
+  height: 24px;
+  margin-left: 16px;
+  cursor: pointer;
+  filter: invert(100%); /* garante que ícones escuros fiquem brancos */
+}
