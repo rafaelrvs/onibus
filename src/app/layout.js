@@ -29,7 +29,7 @@ export default function RootLayout({ children }) {
     <html lang="pt-BR" className={`${geistSans.variable} ${geistMono.variable}`}> 
       <head>
         <meta charSet="utf-8" />
-        <meta name="google-site-verification" content="rZuGHAoZ-5VYf889SF52GO2hXNLnP7wjkEmZw6AFmvw" />
+      <meta name="google-site-verification" content="adgZNeduAxfoc1c0AfmqmaW0tKBqXJhrxLPDFPyHedU" />
         {/* snippet SSR para o crawler do AdSense */}
         <script
           async
