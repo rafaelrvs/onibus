@@ -23,7 +23,7 @@ const Header = () => {
       </div>
 
       <div className={styles.actions}>
-        <Link href={ "/*"/*"/notifications"*/} aria-label="Notificações">
+        <Link href={ "/"/*"/notifications"*/} aria-label="Notificações">
           <Bell className={styles.icon} />
         </Link>
         <Link href={"/"/*"/profile"*/} aria-label="Perfil">
