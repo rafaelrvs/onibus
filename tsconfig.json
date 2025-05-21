@@ -28,7 +28,7 @@
     ".next/types/**/*.ts",
     "**/*.ts",
     "**/*.tsx"
-, "src/app/components/Noticias/Noticia.jsx", "src/app/components/Footer/Footer.jsx"  ],
+, "src/app/components/Noticias/Noticia.jsx", "src/app/components/Footer/Footer.jsx", "src/app/components/Horario/Horario.jsx"  ],
   "exclude": [
     "node_modules"
   ]

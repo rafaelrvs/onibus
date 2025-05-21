@@ -1,0 +1,12 @@
+/* app/not-found.module.css */
+.container {
+  text-align: center;
+  padding: 2rem;
+}
+.title {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+.subtitle {
+  color: #666;
+}

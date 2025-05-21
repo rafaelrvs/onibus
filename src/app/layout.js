@@ -46,8 +46,9 @@ export default function RootLayout({ children }) {
         </GlobalProvider>
       <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7736006621106112"
      crossorigin="anonymous"></script>
-<ins class="adsbygoogle"
-     style="display:block"
+
+<ins className="adsbygoogle"
+      style={{ display: 'block' }}
      data-ad-format="autorelaxed"
      data-ad-client="ca-pub-7736006621106112"
      data-ad-slot="4570844947"></ins>
