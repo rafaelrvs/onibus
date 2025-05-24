@@ -1,18 +1,16 @@
-
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import styles from './Horario.module.css';
 
 export default function Horario() {
   const [aba, setAba] = useState('diasUteis');        // 'diasUteis' | 'sabados' | 'domingos'
   const [sentido, setSentido] = useState('a');         // 'a' = partida_a | 'b' = partida_b
-  const [linhas, setLinhas] = useState([]);
+  const [linhas, setLinhas] = useState([]);              // agora guarda objetos completos
+  const [inputValue, setInputValue] = useState('');      // valor digitado pelo usuário
   const [selectedLinha, setSelectedLinha] = useState('');
   const [horariosData, setHorariosData] = useState({
-    diasUteis: [],
-    sabados: [],
-    domingos: []
+    diasUteis: [], sabados: [], domingos: []
   });
-  const [loading, setLoading] = useState(true); // inicia carregando
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const tabs = [
@@ -21,16 +19,19 @@ export default function Horario() {
     { key: 'domingos',  label: 'Domingos' }
   ];
 
-  // 1️⃣ Busca todas as linhas ao montar
+  // 1️⃣ Busca todas as linhas ao montar (inclui nome e código)
   useEffect(() => {
     async function fetchLinhas() {
       try {
         const res = await fetch('/api/linhas');
         if (!res.ok) throw new Error('Erro ao buscar linhas');
         const data = await res.json();
-        const codigos = data.linhas.map(item => item.linha);
-        setLinhas(codigos);
-        if (codigos.length) setSelectedLinha(codigos[0]);
+        setLinhas(data.linhas);
+        if (data.linhas.length) {
+          const primeira = data.linhas[0].linha;
+          setInputValue(primeira);
+          setSelectedLinha(primeira);
+        }
       } catch (err) {
         console.error(err);
         setError('Não foi possível carregar as linhas.');
@@ -39,7 +40,23 @@ export default function Horario() {
     fetchLinhas();
   }, []);
 
-  // 2️⃣ Busca horários sempre que mudar a linha
+  // 2️⃣ Filtra linhas por código ou nome com base no input
+  const filteredLinhas = useMemo(() => {
+    const term = inputValue.toLowerCase();
+    return linhas.filter(item =>
+      item.linha.toLowerCase().includes(term) ||
+      item.nome.toLowerCase().includes(term)
+    );
+  }, [linhas, inputValue]);
+
+  // 3️⃣ Atualiza selectedLinha quando o input bate exatamente com um código
+  useEffect(() => {
+    if (linhas.some(item => item.linha === inputValue)) {
+      setSelectedLinha(inputValue);
+    }
+  }, [inputValue, linhas]);
+
+  // 4️⃣ Busca horários sempre que mudar a linha selecionada
   useEffect(() => {
     if (!selectedLinha) return;
     async function fetchHorarios() {
@@ -70,21 +87,25 @@ export default function Horario() {
 
   return (
     <div className={styles.container}>
-      {/* Seleção de linha */}
+      {/* Seleção de linha (código filtrado por nome ou código) */}
       {linhas.length > 0 && (
         <div className={styles.linhasDisponiveis}>
           <strong>Selecione ou digite a linha:</strong>{' '}
           <input
             type="text"
             list="linhas-list"
-            value={selectedLinha}
-            onChange={e => setSelectedLinha(e.target.value.toUpperCase())}
+            value={inputValue}
+            onChange={e => setInputValue(e.target.value.toUpperCase())}
             className={`form-control ${styles.selectLinha}`}
-            placeholder="Ex: C002A"
+            placeholder="Ex: C002A ou Circular"
           />
           <datalist id="linhas-list">
-            {linhas.map(l => (
-              <option key={l} value={l} />
+            {filteredLinhas.map(item => (
+              <option
+                key={item.linha}
+                value={item.linha}
+                label={item.nome}
+              />
             ))}
           </datalist>
         </div>
@@ -138,18 +159,6 @@ export default function Horario() {
             })}
         </div>
       )}
-
-      {/* Ver todos os horários (JSON) */}
-      {/* <div className={styles.verTodos}>
-        <a
-          href={`/api/horarios/${selectedLinha}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={styles.link}
-        >
-          Ver todos os horários (JSON)
-        </a>
-      </div> */}
     </div>
   );
 }

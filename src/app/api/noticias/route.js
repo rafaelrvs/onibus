@@ -1,33 +1,97 @@
-// src/app/api/noticias/route.js
-import { NextResponse } from 'next/server'
+'use client'
 
-export async function GET(request) {
-  const { searchParams } = new URL(request.url)
-  const estado = searchParams.get('state') || 'SP'
-  const apiKey = process.env.NEWS_API_KEY
-  if (!apiKey) {
-    return NextResponse.json(
-      { error: 'Missing NEWS_API_KEY in env' },
-      { status: 500 }
-    )
+import React, { useEffect, useState } from 'react'
+import { Newspaper, AlertTriangle, CheckCircle } from 'lucide-react'
+import styles from './Noticias.module.css'
+
+const NEWS_API_KEY = process.env.NEWS_API_KEY // defina em env.local
+const BASE_URL = 'https://newsapi.org/v2/top-headlines'
+
+export default function Noticias() {
+  const [stateCode] = useState('SP')
+  const [articles, setArticles] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+
+  const iconMap = {
+    Comunicado: <Newspaper />,
+    Alerta: <AlertTriangle />,
+    Novidade: <CheckCircle />
   }
 
-  const qry = encodeURIComponent(estado === 'SP' ? 'São Paulo' : estado)
-  const url = `https://newsapi.org/v2/top-headlines?country=br&pageSize=5&q=${qry}&apiKey=${apiKey}`
-
-  const res = await fetch(url)
-  if (!res.ok) {
-    return NextResponse.json(
-      { error: 'Erro ao buscar notícias externas.' },
-      { status: 502 }
-    )
-  }
-  const data = await res.json()
-
-  return NextResponse.json(data, {
-    headers: {
-      // publica no CDN (s-maxage) por 2h, sem cache no browser (max-age=0)
-      'Cache-Control': 'public, max-age=0, s-maxage=7200'
+  const getBgColor = (type) => {
+    switch(type) {
+      case 'Comunicado': return '#E8F0FE'
+      case 'Alerta': return '#FFF9E6'
+      case 'Novidade': return '#E6F4EA'
+      default: return '#F0F0F0'
     }
-  })
+  }
+
+  useEffect(() => {
+    async function fetchNews() {
+      setLoading(true)
+      setError(null)
+      try {
+        const url = `${BASE_URL}?country=br&category=general&apiKey=${NEWS_API_KEY}`
+        const res = await fetch(url)
+        if (!res.ok) throw new Error(`Erro ${res.status}`)
+        const json = await res.json()
+        setArticles(json.articles || [])
+      } catch (err) {
+        console.error(err)
+        setError('Não foi possível carregar as notícias.')
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchNews()
+  }, [stateCode])
+
+  return (
+    <div className={styles.container}>
+      <h2 className={styles.title}>Últimas Notícias – {stateCode}</h2>
+
+      {loading && <p className={styles.loading}>Carregando notícias...</p>}
+      {error && <p className={styles.error}>{error}</p>}
+
+      {!loading && !error && (
+        <ul className={styles.list}>
+          {articles.map((item, idx) => {
+            const type = item.source.name || 'Novidade'
+            return (
+              <li key={idx} className={styles.card}>
+                <div
+                  className={styles.iconWrapper}
+                  style={{ backgroundColor: getBgColor(type) }}
+                >
+                  {iconMap[type] || <Newspaper />}
+                </div>
+                <div className={styles.content}>
+                  <span className={styles.type}>{type}</span>
+                  <h3 className={styles.newsTitle}>{item.title}</h3>
+                  <p className={styles.newsDesc}>{item.description}</p>
+                  <div className={styles.footer}>
+                    <span className={styles.date}>
+                      {new Date(item.publishedAt).toLocaleDateString('pt-BR', {
+                        day: '2-digit', month: '2-digit', year: 'numeric'
+                      })}
+                    </span>
+                    <a
+                      href={item.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={styles.readMore}
+                    >
+                      Ler mais
+                    </a>
+                  </div>
+                </div>
+              </li>
+            )
+          })}
+        </ul>
+      )}
+    </div>
+  )
 }

@@ -1,6 +1,7 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
+import Fuse from 'fuse.js'
 import styles from './Main.module.css'
 import { Search, ArrowRight, List, Clock, Map, Newspaper } from 'lucide-react'
 import Horario from '../Horario/Horario'
@@ -13,6 +14,25 @@ export default function Main() {
   const [popularLines, setPopularLines] = useState([])
   const [loading, setLoading] = useState(true)
 
+  // Fuse.js setup for fuzzy searching
+  const fuse = useMemo(
+    () => new Fuse(popularLines, {
+      keys: ['name', 'id'],
+      threshold: 0.3,       // adjust for sensitivity
+      includeScore: false,
+    }),
+    [popularLines]
+  )
+
+  // Compute filtered results
+  const filteredLines = useMemo(() => {
+    const term = search.trim()
+    if (!term) return popularLines
+    // use Fuse for fuzzy
+    const results = fuse.search(term)
+    return results.map(({ item }) => item)
+  }, [search, popularLines, fuse])
+
   // função pra escolher cor de ETA
   const getEtaColor = eta => {
     if (eta <= 5) return '#28A745'
@@ -23,12 +43,12 @@ export default function Main() {
   // calcula minutos até o próximo horário em partida_a
   const calcEta = partidas => {
     const now = new Date()
-    const today = now.toISOString().slice(0,10) // YYYY-MM-DD
+    const today = now.toISOString().slice(0,10)
     const deltas = partidas
       .map(t => new Date(`${today}T${t}`))
-      .map(d => (d - now)/60000)                   // diferença em minutos
+      .map(d => (d - now)/60000)
       .filter(minutes => minutes >= 0)
-    if (deltas.length === 0) return null
+    if (!deltas.length) return null
     return Math.round(Math.min(...deltas))
   }
 
@@ -37,18 +57,18 @@ export default function Main() {
       try {
         const res = await fetch('/api/linhas')
         const json = await res.json()
-        // mapeia resposta pra nosso formato
         const lines = json.linhas.map(item => {
           const eta = calcEta(item.partida_a)
-          // cores fixas por exemplo, ou poderia ter lógica própria
           const colorMap = ['#0052CC','#DC3545','#28A745','#6F42C1']
           const idx = Math.floor(Math.random() * colorMap.length)
           return {
             id: item.linha,
             name: item.nome,
-            via: item.partida_a.length ? `Próx.: ${item.partida_a[0].slice(0,5)}` : 'Sem partida',
+            via: item.partida_a.length
+              ? `Próx.: ${item.partida_a[0].slice(0,5)}`
+              : 'Sem partida',
             eta,
-            color: colorMap[idx]
+            color: colorMap[idx],
           }
         })
         setPopularLines(lines)
@@ -60,9 +80,9 @@ export default function Main() {
     }
     loadLines()
   }, [])
-
   return (
-    <main className={styles.main}>
+
+        <main className={styles.main}>
       {/* Search */}
       <div className={styles.searchContainer}>
         <Search className={styles.searchIcon} />
@@ -84,15 +104,14 @@ export default function Main() {
           { key: 'linhas', icon: <List size={20} />, label: 'Linhas' },
           { key: 'horarios', icon: <Clock size={20} />, label: 'Horários' },
           { key: 'mapa', icon: <Map size={20} />, label: 'Mapa' },
-          // { key: 'noticias', icon: <Newspaper size={20} />, label: 'Notícias' }
+          { key: 'noticias', icon: <Newspaper size={20} />, label: 'Notícias' }
         ].map(tab => (
           <button
             key={tab.key}
             className={`${styles.navItem} ${activeTab === tab.key ? styles.active : ''}`}
             onClick={() => setActiveTab(tab.key)}
           >
-            {tab.icon}
-            <span>{tab.label}</span>
+            {tab.icon}<span>{tab.label}</span>
           </button>
         ))}
       </nav>
@@ -102,57 +121,46 @@ export default function Main() {
         <section className={styles.popularSection}>
           <h2 className={styles.sectionTitle}>Linhas Populares</h2>
 
-          {loading
-            ? <p>Carregando linhas…</p>
-            : (
-              <ul className={styles.lineList}>
-                {popularLines.map(line => (
-                  <li key={line.id} className={styles.lineCard}>
+          {loading ? (
+            <p>Carregando linhas…</p>
+          ) : (
+            <ul className={styles.lineList}>
+              {filteredLines.map(line => (
+                <li key={line.id} className={styles.lineCard}>
+                  <div
+                    className={styles.lineIcon}
+                    style={{ backgroundColor: line.color }}
+                  >{line.id}</div>
+                  <div className={styles.lineInfo}>
+                    <h3 className={styles.lineTitle}>{line.name}</h3>
+                    <p className={styles.lineVia}>{line.via}</p>
+                  </div>
+                  {line.eta != null && (
                     <div
-                      className={styles.lineIcon}
-                      style={{ backgroundColor: line.color }}
-                    >
-                      {line.id}
-                    </div>
-                    <div className={styles.lineInfo}>
-                      <h3 className={styles.lineTitle}>{line.name}</h3>
-                      <p className={styles.lineVia}>{line.via}</p>
-                    </div>
-                    {line.eta != null && (
-                      <div
-                        className={styles.lineEta}
-                        style={{ backgroundColor: getEtaColor(line.eta) }}
-                      >
-                        {line.eta} min
-                      </div>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            )
-          }
+                      className={styles.lineEta}
+                      style={{ backgroundColor: getEtaColor(line.eta) }}
+                    >{line.eta} min</div>
+                  )}
+                </li>
+              ))}
+            </ul>
+          )}
         </section>
       )}
 
       {/* Horários */}
       {activeTab === 'horarios' && (
-        <section className={styles.horariosSection}>
-          <Horario />
-        </section>
+        <section className={styles.horariosSection}><Horario /></section>
       )}
 
       {/* Mapa */}
       {activeTab === 'mapa' && (
-        <section className={styles.mapaSection}>
-          <MapaOnibus />
-        </section>
+        <section className={styles.mapaSection}><MapaOnibus /></section>
       )}
 
       {/* Notícias */}
       {activeTab === 'noticias' && (
-        <section className={styles.noticiasSection}>
-          <Noticias />
-        </section>
+        <section className={styles.noticiasSection}><Noticias /></section>
       )}
     </main>
   )

@@ -17,12 +17,13 @@ const geistMono = localFont({
 export const metadata = {
   title: "Pega o Bus Aí - Consulta de Horários de Ônibus",
   description:
-    "Com o app Pega o Bus Aí, consulte os horários de ônibus em tempo real, visualize rotas e receba alertas...",
+    "Com o app Pega o Bus Aí, consulte horários de ônibus em tempo real, visualize rotas, itinerários e receba alertas de chegada diretamente no seu celular.",
   icons: {
-    icon: "/favicon.ico",
+    icon: "/favicon.ico",       // ou "/logo.svg" / "/logo.png"
     shortcut: "/favicon.ico",
+    apple: "/favicon.ico",
   },
-}
+};
 
 export default function RootLayout({ children }) {
   return (
@@ -30,6 +31,13 @@ export default function RootLayout({ children }) {
       <head>
         <meta charSet="utf-8" />
       <meta name="google-site-verification" content="adgZNeduAxfoc1c0AfmqmaW0tKBqXJhrxLPDFPyHedU" />
+       <meta
+          name="keywords"
+          content="horários de ônibus, consulta de ônibus em tempo real, rotas de ônibus, itinerários de ônibus, Pega o Bus Aí"
+        />
+        <meta name="robots" content="index, follow" />
+        <link rel="canonical" href="https://www.rvstechsolucoes.com.br/" />
+
         {/* snippet SSR para o crawler do AdSense */}
         <script
           async
@@ -56,6 +64,7 @@ export default function RootLayout({ children }) {
      (adsbygoogle = window.adsbygoogle || []).push({});
 </script> */}
       </body>
+
     </html>
   )
 }
