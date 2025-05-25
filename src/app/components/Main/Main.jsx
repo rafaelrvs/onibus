@@ -157,7 +157,7 @@ export default function Main() {
           {loading ? (
             <div className={styles.loading}>
               <Loader2 className={styles.spinner} />
-              <span>Carregando linhas…</span>
+             
             </div>
           ) : (
             <ul className={styles.lineList}>
