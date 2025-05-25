@@ -47,16 +47,13 @@ export default function Horario() {
     );
   }, [linhas, nameSearch]);
 
-  // Quando seleciona sugestão de nome
   function selectByName(item) {
     setNameSearch(item.nome);
     setInputValue(item.linha);
     setSelectedLinha(item.linha);
-    // limpa sugestões
     if (suggestionsRef.current) suggestionsRef.current.blur();
   }
 
-  // completar ao pressionar espaço
   function handleNameKeyDown(e) {
     if (e.key === ' ' && nameSuggestions.length > 0) {
       e.preventDefault();
@@ -64,7 +61,6 @@ export default function Horario() {
     }
   }
 
-  // Filtra linhas por código e nome (para autocomplete código)
   const filteredLinhas = useMemo(() => {
     const codeTerm = inputValue.toLowerCase();
     const nameTerm = nameSearch.toLowerCase();
@@ -111,7 +107,6 @@ export default function Horario() {
 
   return (
     <div className={styles.container}>
-      {/* Busca pelo nome com sugestões custom */}
       <div className={styles.searchContainer}>
         <label htmlFor="searchName" className={styles.label}>
           Pesquisar pelo nome:
@@ -142,7 +137,6 @@ export default function Horario() {
         )}
       </div>
 
-      {/* Input para buscar pelo código */}
       {linhas.length > 0 && (
         <div className={styles.searchContainer}>
           <label htmlFor="searchCode" className={styles.label}>
@@ -165,7 +159,6 @@ export default function Horario() {
         </div>
       )}
 
-      {/* Abas de dias */}
       <div className={styles.tabs}>
         {tabs.map(t => (
           <button
@@ -178,7 +171,6 @@ export default function Horario() {
         ))}
       </div>
 
-      {/* Sentido */}
       <div className={styles.sentido}>
         <span>
           <strong>Sentido:</strong>{' '}
@@ -189,12 +181,11 @@ export default function Horario() {
         </button>
       </div>
 
-      {/* Grade de horários */}
       {loading ? (
         <div className={styles.spinnerContainer}>
-            <div className={styles.loading}>
-              <Loader2 className={styles.spinner} />
-            </div>  
+          <div className={styles.loading}>
+            <Loader2 className={styles.spinner} />
+          </div>
         </div>
       ) : error ? (
         <p className={styles.error}>{error}</p>
@@ -210,6 +201,16 @@ export default function Horario() {
           })}
         </div>
       )}
+
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7736006621106112" crossorigin="anonymous"></script>
+      <ins className="adsbygoogle"
+           style={{ display: 'block' }}
+           data-ad-format="autorelaxed"
+           data-ad-client="ca-pub-7736006621106112"
+           data-ad-slot="4570844947"></ins>
+      <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
     </div>
   );
 }

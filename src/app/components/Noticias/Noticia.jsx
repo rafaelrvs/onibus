@@ -154,6 +154,18 @@ export default function Noticias() {
           )
         })}
       </ul>
+ <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7736006621106112"
+     crossorigin="anonymous"></script>
+
+<ins className="adsbygoogle"
+      style={{ display: 'block' }}
+     data-ad-client="ca-pub-7736006621106112"
+     data-ad-slot="9712163431"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
     </div>
   )
 }
