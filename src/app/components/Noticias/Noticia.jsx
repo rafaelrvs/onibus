@@ -99,6 +99,15 @@ export default function Noticias() {
     <div className={styles.container}>
       <h1 className={styles.title}>Últimas Notícias – {stateCode}</h1>
       {/* Botões de filtro */}
+
+      <amp-ad width="100vw" height="320"
+     type="adsense"
+     data-ad-client="ca-pub-7736006621106112"
+     data-ad-slot="9712163431"
+     data-auto-format="rspv"
+     data-full-width="">
+  <div overflow=""></div>
+</amp-ad>
       <div className={styles.filterBar}>
         {filters.map(f => (
           <button
