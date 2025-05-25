@@ -1,76 +1,106 @@
+// components/Main/Main.tsx
 'use client'
 
 import React, { useState, useEffect, useMemo } from 'react'
 import Fuse from 'fuse.js'
 import styles from './Main.module.css'
-import { Search, ArrowRight, List, Clock, Map, Newspaper } from 'lucide-react'
+import {
+  Search,
+  ArrowRight,
+  List,
+  Clock,
+  Map,
+  Newspaper,
+  Loader2
+} from 'lucide-react'
 import Horario from '../Horario/Horario'
 import MapaOnibus from '../Mapa/Mapa'
 import Noticias from '../Noticias/Noticia'
+import Modal from '../Modal/Modal'
 
 export default function Main() {
   const [search, setSearch] = useState('')
   const [activeTab, setActiveTab] = useState('linhas')
   const [popularLines, setPopularLines] = useState([])
   const [loading, setLoading] = useState(true)
+  const [openModal, setOpenModal] = useState(false)
+  const [selectedLine, setSelectedLine] = useState(null)
 
-  // Fuse.js setup for fuzzy searching
+  // Fuse.js
   const fuse = useMemo(
-    () => new Fuse(popularLines, {
-      keys: ['name', 'id'],
-      threshold: 0.3,       // adjust for sensitivity
-      includeScore: false,
-    }),
+    () => new Fuse(popularLines, { keys: ['name', 'id'], threshold: 0.3 }),
     [popularLines]
   )
-
-  // Compute filtered results
   const filteredLines = useMemo(() => {
     const term = search.trim()
     if (!term) return popularLines
-    // use Fuse for fuzzy
-    const results = fuse.search(term)
-    return results.map(({ item }) => item)
+    return fuse.search(term).map(r => r.item)
   }, [search, popularLines, fuse])
 
-  // função pra escolher cor de ETA
-  const getEtaColor = eta => {
-    if (eta <= 5) return '#28A745'
-    if (eta <= 10) return '#FFC107'
+  // -----------------------------
+  // Helpers corrigidos abaixo
+  // -----------------------------
+  // Cor do badge com base no total de minutos
+  const getEtaColor = etaObj => {
+    if (!etaObj) return '#6c757d'
+    const m = etaObj.totalMinutes
+    if (m <= 5)  return '#28A745'
+    if (m <= 10) return '#FFC107'
     return '#DC3545'
   }
 
-  // calcula minutos até o próximo horário em partida_a
+  // Calcula diferença até o próximo horário, considerando também o próximo dia
   const calcEta = partidas => {
     const now = new Date()
-    const today = now.toISOString().slice(0,10)
-    const deltas = partidas
-      .map(t => new Date(`${today}T${t}`))
-      .map(d => (d - now)/60000)
-      .filter(minutes => minutes >= 0)
-    if (!deltas.length) return null
-    return Math.round(Math.min(...deltas))
+
+    // para cada horário string "HH:mm", retorna diff em ms até hoje ou amanhã
+    const diffsMs = partidas.map(t => {
+      const [h, m] = t.split(':').map(Number)
+      // candidato para hoje
+      const cand = new Date(now)
+      cand.setHours(h, m, 0, 0)
+      let diff = cand.getTime() - now.getTime()
+      // se já passou, considera o mesmo horário no dia seguinte
+      if (diff < 0) {
+        cand.setDate(cand.getDate() + 1)
+        diff = cand.getTime() - now.getTime()
+      }
+      return diff
+    })
+
+    if (!diffsMs.length) return null
+
+    // menor diff positivo
+    const minDiff = Math.min(...diffsMs)
+    const totalMinutes = Math.floor(minDiff / 60000)
+    const hours = Math.floor(totalMinutes / 60)
+    const minutes = totalMinutes % 60
+
+    return { hours, minutes, totalMinutes }
   }
+  // -----------------------------
 
   useEffect(() => {
     async function loadLines() {
       try {
         const res = await fetch('/api/linhas')
         const json = await res.json()
+
         const lines = json.linhas.map(item => {
-          const eta = calcEta(item.partida_a)
-          const colorMap = ['#0052CC','#DC3545','#28A745','#6F42C1']
-          const idx = Math.floor(Math.random() * colorMap.length)
+          const etaObj = calcEta(item.partida_a)
+          const colorMap = ['#0052CC', '#DC3545', '#28A745', '#6F42C1']
+
           return {
-            id: item.linha,
-            name: item.nome,
-            via: item.partida_a.length
-              ? `Próx.: ${item.partida_a[0].slice(0,5)}`
-              : 'Sem partida',
-            eta,
-            color: colorMap[idx],
+            id:    item.linha,
+            name:  item.nome,
+            via:   item.partida_a.length
+                      ? `Próx.: ${item.partida_a[0].slice(0,5)}`
+                      : 'Sem partida',
+            eta:   etaObj,
+            color: colorMap[Math.floor(Math.random() * colorMap.length)],
           }
         })
+
         setPopularLines(lines)
       } catch (err) {
         console.error(err)
@@ -80,9 +110,9 @@ export default function Main() {
     }
     loadLines()
   }, [])
-  return (
 
-        <main className={styles.main}>
+  return (
+    <main className={styles.main}>
       {/* Search */}
       <div className={styles.searchContainer}>
         <Search className={styles.searchIcon} />
@@ -101,17 +131,20 @@ export default function Main() {
       {/* Tabs */}
       <nav className={styles.nav}>
         {[
-          { key: 'linhas', icon: <List size={20} />, label: 'Linhas' },
-          { key: 'horarios', icon: <Clock size={20} />, label: 'Horários' },
-          { key: 'mapa', icon: <Map size={20} />, label: 'Mapa' },
-          { key: 'noticias', icon: <Newspaper size={20} />, label: 'Notícias' }
+          { key: 'linhas',   icon: <List size={20} />,     label: 'Linhas'   },
+          { key: 'horarios', icon: <Clock size={20} />,    label: 'Horários' },
+          { key: 'mapa',     icon: <Map size={20} />,      label: 'Mapa'     },
+          { key: 'noticias', icon: <Newspaper size={20} />,label: 'Notícias'}
         ].map(tab => (
           <button
             key={tab.key}
-            className={`${styles.navItem} ${activeTab === tab.key ? styles.active : ''}`}
+            className={`${styles.navItem} ${
+              activeTab === tab.key ? styles.active : ''
+            }`}
             onClick={() => setActiveTab(tab.key)}
           >
-            {tab.icon}<span>{tab.label}</span>
+            {tab.icon}
+            <span>{tab.label}</span>
           </button>
         ))}
       </nav>
@@ -122,24 +155,40 @@ export default function Main() {
           <h2 className={styles.sectionTitle}>Linhas Populares</h2>
 
           {loading ? (
-            <p>Carregando linhas…</p>
+            <div className={styles.loading}>
+              <Loader2 className={styles.spinner} />
+              <span>Carregando linhas…</span>
+            </div>
           ) : (
             <ul className={styles.lineList}>
               {filteredLines.map(line => (
-                <li key={line.id} className={styles.lineCard}>
+                <li
+                  key={line.id}
+                  className={styles.lineCard}
+                  onClick={() => {
+                    setSelectedLine(line)
+                    setOpenModal(true)
+                  }}
+                >
                   <div
                     className={styles.lineIcon}
                     style={{ backgroundColor: line.color }}
-                  >{line.id}</div>
+                  >
+                    {line.id}
+                  </div>
                   <div className={styles.lineInfo}>
                     <h3 className={styles.lineTitle}>{line.name}</h3>
                     <p className={styles.lineVia}>{line.via}</p>
                   </div>
-                  {line.eta != null && (
+                  {line.eta && (
                     <div
                       className={styles.lineEta}
                       style={{ backgroundColor: getEtaColor(line.eta) }}
-                    >{line.eta} min</div>
+                    >
+                      {/* Exibe “Xh Ym” ou só “Ym” */}
+                      {line.eta.hours > 0 && `${line.eta.hours}h `}
+                      {line.eta.minutes}m
+                    </div>
                   )}
                 </li>
               ))}
@@ -148,20 +197,29 @@ export default function Main() {
         </section>
       )}
 
-      {/* Horários */}
-      {activeTab === 'horarios' && (
-        <section className={styles.horariosSection}><Horario /></section>
-      )}
+      {/* Outras abas */}
+      {activeTab === 'horarios' && <Horario />}
+      {activeTab === 'mapa'     && <MapaOnibus />}
+      {activeTab === 'noticias' && <Noticias />}
 
-      {/* Mapa */}
-      {activeTab === 'mapa' && (
-        <section className={styles.mapaSection}><MapaOnibus /></section>
-      )}
-
-      {/* Notícias */}
-      {activeTab === 'noticias' && (
-        <section className={styles.noticiasSection}><Noticias /></section>
-      )}
+      {/* Modal */}
+      <Modal isOpen={openModal} onClose={() => setOpenModal(false)}>
+        {selectedLine && (
+          <div>
+            <h2>{selectedLine.name}</h2>
+            <p><strong>ID:</strong> {selectedLine.id}</p>
+            <p><strong>Via:</strong> {selectedLine.via}</p>
+            <p>
+              <strong>Saída do Terminal:</strong>{' '}
+              {selectedLine.eta
+                ? `${selectedLine.eta.hours > 0
+                    ? `${selectedLine.eta.hours}h `
+                    : ''}${selectedLine.eta.minutes}m`
+                : 'Sem ETA'}
+            </p>
+          </div>
+        )}
+      </Modal>
     </main>
   )
 }

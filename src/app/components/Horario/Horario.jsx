@@ -1,25 +1,25 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo, useRef } from 'react';
 import styles from './Horario.module.css';
+import { Loader2 } from 'lucide-react';
 
 export default function Horario() {
-  const [aba, setAba] = useState('diasUteis');        // 'diasUteis' | 'sabados' | 'domingos'
-  const [sentido, setSentido] = useState('a');         // 'a' = partida_a | 'b' = partida_b
-  const [linhas, setLinhas] = useState([]);              // agora guarda objetos completos
-  const [inputValue, setInputValue] = useState('');      // valor digitado pelo usuário
+  const [aba, setAba] = useState('diasUteis');
+  const [sentido, setSentido] = useState('a');
+  const [linhas, setLinhas] = useState([]);
+  const [inputValue, setInputValue] = useState('');
+  const [nameSearch, setNameSearch] = useState('');
   const [selectedLinha, setSelectedLinha] = useState('');
-  const [horariosData, setHorariosData] = useState({
-    diasUteis: [], sabados: [], domingos: []
-  });
+  const [horariosData, setHorariosData] = useState({ diasUteis: [], sabados: [], domingos: [] });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const suggestionsRef = useRef(null);
 
   const tabs = [
     { key: 'diasUteis', label: 'Dias Úteis' },
-    { key: 'sabados',   label: 'Sábados' },
-    { key: 'domingos',  label: 'Domingos' }
+    { key: 'sabados',   label: 'Sábados'   },
+    { key: 'domingos',  label: 'Domingos'  }
   ];
 
-  // 1️⃣ Busca todas as linhas ao montar (inclui nome e código)
   useEffect(() => {
     async function fetchLinhas() {
       try {
@@ -40,23 +40,47 @@ export default function Horario() {
     fetchLinhas();
   }, []);
 
-  // 2️⃣ Filtra linhas por código ou nome com base no input
-  const filteredLinhas = useMemo(() => {
-    const term = inputValue.toLowerCase();
+  const nameSuggestions = useMemo(() => {
+    const term = nameSearch.toLowerCase();
     return linhas.filter(item =>
-      item.linha.toLowerCase().includes(term) ||
       item.nome.toLowerCase().includes(term)
     );
-  }, [linhas, inputValue]);
+  }, [linhas, nameSearch]);
 
-  // 3️⃣ Atualiza selectedLinha quando o input bate exatamente com um código
+  // Quando seleciona sugestão de nome
+  function selectByName(item) {
+    setNameSearch(item.nome);
+    setInputValue(item.linha);
+    setSelectedLinha(item.linha);
+    // limpa sugestões
+    if (suggestionsRef.current) suggestionsRef.current.blur();
+  }
+
+  // completar ao pressionar espaço
+  function handleNameKeyDown(e) {
+    if (e.key === ' ' && nameSuggestions.length > 0) {
+      e.preventDefault();
+      selectByName(nameSuggestions[0]);
+    }
+  }
+
+  // Filtra linhas por código e nome (para autocomplete código)
+  const filteredLinhas = useMemo(() => {
+    const codeTerm = inputValue.toLowerCase();
+    const nameTerm = nameSearch.toLowerCase();
+    return linhas.filter(item => {
+      const matchesCode = !codeTerm || item.linha.toLowerCase().includes(codeTerm);
+      const matchesName = !nameTerm || item.nome.toLowerCase().includes(nameTerm);
+      return matchesCode && matchesName;
+    });
+  }, [linhas, inputValue, nameSearch]);
+
   useEffect(() => {
     if (linhas.some(item => item.linha === inputValue)) {
       setSelectedLinha(inputValue);
     }
   }, [inputValue, linhas]);
 
-  // 4️⃣ Busca horários sempre que mudar a linha selecionada
   useEffect(() => {
     if (!selectedLinha) return;
     async function fetchHorarios() {
@@ -87,25 +111,55 @@ export default function Horario() {
 
   return (
     <div className={styles.container}>
-      {/* Seleção de linha (código filtrado por nome ou código) */}
+      {/* Busca pelo nome com sugestões custom */}
+      <div className={styles.searchContainer}>
+        <label htmlFor="searchName" className={styles.label}>
+          Pesquisar pelo nome:
+        </label>
+        <input
+          id="searchName"
+          type="text"
+          ref={suggestionsRef}
+          value={nameSearch}
+          onChange={e => setNameSearch(e.target.value)}
+          onKeyDown={handleNameKeyDown}
+          className={`${styles.searchInput} form-control`}
+          placeholder="Digite parte do nome do ônibus"
+          autoComplete="off"
+        />
+        {nameSearch && nameSuggestions.length > 0 && (
+          <ul className={styles.suggestionsList}>
+            {nameSuggestions.slice(0, 5).map(item => (
+              <li
+                key={item.linha}
+                className={styles.suggestionItem}
+                onMouseDown={() => selectByName(item)}
+              >
+                {item.nome}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+
+      {/* Input para buscar pelo código */}
       {linhas.length > 0 && (
-        <div className={styles.linhasDisponiveis}>
-          <strong>Selecione ou digite a linha:</strong>{' '}
+        <div className={styles.searchContainer}>
+          <label htmlFor="searchCode" className={styles.label}>
+            Pesquisar pelo código:
+          </label>
           <input
+            id="searchCode"
             type="text"
             list="linhas-list"
             value={inputValue}
             onChange={e => setInputValue(e.target.value.toUpperCase())}
-            className={`form-control ${styles.selectLinha}`}
-            placeholder="Ex: C002A ou Circular"
+            className={`${styles.selectLinha} form-control`}
+            placeholder="Ex: C002A"
           />
           <datalist id="linhas-list">
             {filteredLinhas.map(item => (
-              <option
-                key={item.linha}
-                value={item.linha}
-                label={item.nome}
-              />
+              <option key={item.linha} value={item.linha} label={item.nome} />
             ))}
           </datalist>
         </div>
@@ -128,9 +182,7 @@ export default function Horario() {
       <div className={styles.sentido}>
         <span>
           <strong>Sentido:</strong>{' '}
-          {sentido === 'a'
-            ? 'Terminal → Centro'
-            : 'Centro → Terminal'}
+          {sentido === 'a' ? 'Terminal → Centro' : 'Centro → Terminal'}
         </span>
         <button onClick={trocarSentido} className={styles.link}>
           Ver outro sentido
@@ -140,23 +192,22 @@ export default function Horario() {
       {/* Grade de horários */}
       {loading ? (
         <div className={styles.spinnerContainer}>
-          <div className={styles.spinner} aria-label="Carregando" />
+            <div className={styles.loading}>
+              <Loader2 className={styles.spinner} />
+            </div>  
         </div>
       ) : error ? (
         <p className={styles.error}>{error}</p>
       ) : (
         <div className={styles.grade}>
-          {horariosData[aba]
-            .map((entry, idx) => {
-              const hora = typeof entry === 'string'
-                ? entry
-                : entry.hora;
-              return (
-                <div key={idx} className={styles.item}>
-                  {hora}
-                </div>
-              );
-            })}
+          {horariosData[aba].map((entry, idx) => {
+            const hora = typeof entry === 'string' ? entry : entry.hora;
+            return (
+              <div key={idx} className={styles.item}>
+                {hora}
+              </div>
+            );
+          })}
         </div>
       )}
     </div>
