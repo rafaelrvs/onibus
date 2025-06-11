@@ -11,12 +11,15 @@ import {
   Clock,
   Map,
   Newspaper,
-  Loader2
+  Loader2,
+  TrainFront,
+  BusFront
 } from 'lucide-react'
 import Horario from '../Horario/Horario'
 import MapaOnibus from '../Mapa/Mapa'
 import Noticias from '../Noticias/Noticia'
 import Modal from '../Modal/Modal'
+import OnibusInterMunicipal from './../OnibusInterMunicipal/OnibusInterMunicipal';
 
 export default function Main() {
   const [search, setSearch] = useState('')
@@ -113,6 +116,8 @@ export default function Main() {
 
   return (
     <main className={styles.main}>
+              <h1 className={styles.h1horario}>Horários dos Ônibus</h1>
+      
       {/* Search */}
       <div className={styles.searchContainer}>
         <Search className={styles.searchIcon} />
@@ -134,6 +139,7 @@ export default function Main() {
           { key: 'linhas',   icon: <List size={20} />,     label: 'Linhas'   },
           { key: 'horarios', icon: <Clock size={20} />,    label: 'Horários' },
           { key: 'mapa',     icon: <Map size={20} />,      label: 'Mapa'     },
+          { key: 'OnibusIntermunicipal', icon: <BusFront   size={20} />,label: 'Ônibus Intermunicipal'},
           { key: 'noticias', icon: <Newspaper size={20} />,label: 'Notícias'}
         ].map(tab => (
           <button
@@ -153,6 +159,7 @@ export default function Main() {
       {activeTab === 'linhas' && (
         <section className={styles.popularSection}>
           <h2 className={styles.sectionTitle}>Linhas Populares</h2>
+        <h5 className={styles.sectionTitleh5} >Linhas Encontradas:</h5>
 
           {loading ? (
             <div className={styles.loading}>
@@ -200,6 +207,7 @@ export default function Main() {
       {/* Outras abas */}
       {activeTab === 'horarios' && <Horario />}
       {activeTab === 'mapa'     && <MapaOnibus />}
+      {activeTab === 'OnibusIntermunicipal' && <OnibusInterMunicipal />}
       {activeTab === 'noticias' && <Noticias />}
 
       {/* Modal */}

@@ -1,3 +1,4 @@
+'use client'
 import React, { useEffect, useState, useMemo, useRef } from 'react';
 import styles from './Horario.module.css';
 import { Loader2 } from 'lucide-react';

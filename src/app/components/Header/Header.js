@@ -23,12 +23,12 @@ const Header = () => {
       </div>
 
       <div className={styles.actions}>
-        <Link href={ "/notificacao"/*"/notifications"*/} aria-label="Notificações">
+        <p  aria-label="Notificações">
           <Bell className={styles.icon} />
-        </Link>
-        <Link href={"/"/*"/profile"*/} aria-label="Perfil">
+        </p>
+        <p aria-label="Perfil">
           <User className={styles.icon} />
-        </Link>
+        </p>
       </div>
     </header>
   );

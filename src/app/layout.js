@@ -2,6 +2,7 @@
 import localFont from "next/font/local"
 import "./globals.css"
 import { GlobalProvider } from "../Context/globalContext"
+import Horario from './components/Horario/Horario';
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -15,9 +16,9 @@ const geistMono = localFont({
 })
 
 export const metadata = {
-  title: "Pega o Bus Aí - Consulta de Horários de Ônibus",
+  title: "Consulta de Horários de Ônibus, itinerário Ônibus da cidade  - Pega o Bus Aí",
   description:
-    "Com o app Pega o Bus Aí, consulte horários de ônibus em tempo real, visualize rotas, itinerários e receba alertas de chegada diretamente no seu celular.",
+    "Consulte horários de ônibus em tempo real, visualize rotas, itinerários e receba alertas de chegada diretamente no seu celular.",
   icons: {
     icon: "/favicon.ico",       // ou "/logo.svg" / "/logo.png"
     shortcut: "/favicon.ico",

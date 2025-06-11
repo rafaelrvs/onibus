@@ -1,4 +1,5 @@
 // src/app/components/Mapa/Mapa.jsx
+
 import React, { useEffect, useState } from 'react'
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet'
 import { MapPin } from 'lucide-react'
@@ -88,7 +89,7 @@ export default function MapaOnibus() {
 
       <div className={styles.mapWrapper}>
         <MapContainer
-          center={busPositions[0]?.position || [-23.5505, -46.6333]}
+        center={busPositions[0]?.position || [-23.5205, -46.1858]}
           zoom={13}
           scrollWheelZoom={false}
           className={styles.map}

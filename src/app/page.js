@@ -27,6 +27,7 @@ export default function Home() {
 
       {/* Conteúdo que ocupa todo o espaço entre header e footer */}
       <div className={styles.content}>
+        
         <Main />
       </div>
 
