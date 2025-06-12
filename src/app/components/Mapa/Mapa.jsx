@@ -1,9 +1,8 @@
 // src/app/components/Mapa/Mapa.jsx
+'use client'
 
 import React, { useEffect, useState } from 'react'
-import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet'
-import { MapPin } from 'lucide-react'
-import 'leaflet/dist/leaflet.css'
+import MapaGoogle from '../MapaGoogle/MapaGoogle'
 import styles from './Mapa.module.css'
 
 export default function MapaOnibus() {
@@ -11,68 +10,60 @@ export default function MapaOnibus() {
   const [selectedLinha, setSelectedLinha] = useState('')
   const [busPositions, setBusPositions] = useState([])
 
-  // Carrega todas as linhas disponíveis
+  // 1) carrega as linhas
   useEffect(() => {
-    async function fetchLinhas() {
-      try {
-        const res = await fetch('/api/linhas')
-        const data = await res.json()
-        const codigos = data.linhas.map(item => item.linha)
+    fetch('/api/linhas')
+      .then(r => r.json())
+      .then(json => {
+        const codigos = json.linhas.map(i => i.linha)
         setLinhas(codigos)
         if (codigos.length) setSelectedLinha(codigos[0])
-      } catch (err) {
-        console.error('Erro ao buscar linhas:', err)
-      }
-    }
-    fetchLinhas()
+      })
+      .catch(err => console.error('Erro ao buscar linhas:', err))
   }, [])
 
-  // Carrega posições da linha selecionada
+  // 2) carrega itinerário quando trocar de linha
   useEffect(() => {
     if (!selectedLinha) return
+
     async function fetchPosicoes() {
       try {
         const res = await fetch(`/api/itinerarios/${selectedLinha}`)
-        if (!res.ok) throw new Error('Erro ao buscar itinerário')
-        const data = await res.json()
-        // data: array de registros com campo trajeto = ["lon,lat", ...]
-        const positions = data.flatMap(item =>
+        if (!res.ok) {
+          console.error(
+            `API itinerarios/${selectedLinha} retornou`,
+            res.status,
+            await res.text()
+          )
+          setBusPositions([])
+          return
+        }
+
+        const raw = await res.json()
+        // raw pode ser um array ou um objeto { itinerarios: [...] }
+        const list = Array.isArray(raw) ? raw : raw.itinerarios || []
+
+        const traj = list.flatMap(item =>
           JSON.parse(item.trajeto).map(str => {
             const [lon, lat] = str.split(',').map(Number)
-            return { id: selectedLinha, position: [lat, lon] }
+            return { lat, lng: lon }
           })
         )
-        setBusPositions(positions)
+
+        setBusPositions(traj)
       } catch (err) {
-        console.error(err)
+        console.error('Falha no fetchPosicoes:', err)
         setBusPositions([])
       }
     }
+
     fetchPosicoes()
   }, [selectedLinha])
 
-  function LocateControl() {
-    const map = useMapEvents({
-      locationfound(e) {
-        map.flyTo(e.latlng, 14)
-      }
-    })
-    return (
-      <button
-        className={styles.locateButton}
-        onClick={() => map.locate()}
-        aria-label="Localizar"
-      >
-        <MapPin size={20} />
-      </button>
-    )
-  }
-
   return (
     <div className={styles.container}>
-      <h2 className={styles.title}>Mapa ao vivo</h2>
+      <h2 className={styles.title}>Mapa ao vivo (Google Maps)</h2>
 
-      {/* Seleção de linha */}
       <div className={styles.selectContainer}>
         <label htmlFor="linhaSelect">Linha:&nbsp;</label>
         <select
@@ -88,23 +79,10 @@ export default function MapaOnibus() {
       </div>
 
       <div className={styles.mapWrapper}>
-        <MapContainer
-        center={busPositions[0]?.position || [-23.5205, -46.1858]}
-          zoom={13}
-          scrollWheelZoom={false}
-          className={styles.map}
-        >
-          <TileLayer
-            attribution='&copy; OpenStreetMap contributors'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          />
-          {busPositions.map((bus, idx) => (
-            <Marker key={`${bus.id}-${idx}`} position={bus.position}>
-              <Popup>Linha {bus.id}</Popup>
-            </Marker>
-          ))}
-          <LocateControl />
-        </MapContainer>
+        {busPositions.length > 0
+          ? <MapaGoogle trajectory={busPositions} />
+          : <p>Carregando posições ou selecione outra linha…</p>
+        }
       </div>
     </div>
   )

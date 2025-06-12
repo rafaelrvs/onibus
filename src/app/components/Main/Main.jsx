@@ -139,7 +139,7 @@ export default function Main() {
           { key: 'linhas',   icon: <List size={20} />,     label: 'Linhas'   },
           { key: 'horarios', icon: <Clock size={20} />,    label: 'Horários' },
           { key: 'mapa',     icon: <Map size={20} />,      label: 'Mapa'     },
-          { key: 'OnibusIntermunicipal', icon: <BusFront   size={20} />,label: 'Ônibus Intermunicipal'},
+          { key: 'OnibusIntermunicipal', icon: <BusFront   size={20} />,label: 'Intermunicipal'},
           { key: 'noticias', icon: <Newspaper size={20} />,label: 'Notícias'}
         ].map(tab => (
           <button

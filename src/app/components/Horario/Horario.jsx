@@ -202,13 +202,16 @@ export default function Horario() {
           })}
         </div>
       )}
+      
 
       <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7736006621106112" crossorigin="anonymous"></script>
+    
       <ins className="adsbygoogle"
            style={{ display: 'block' }}
            data-ad-format="autorelaxed"
            data-ad-client="ca-pub-7736006621106112"
-           data-ad-slot="4570844947"></ins>
+           data-ad-slot="9712163431"
+          data-full-width-responsive="true"></ins>
       <script>
         (adsbygoogle = window.adsbygoogle || []).push({});
       </script>

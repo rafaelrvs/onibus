@@ -1,7 +1,6 @@
 
 export const ativaFrame = (inputUsuario, mapa, setLinkframe) => {
     const pesquisa = inputUsuario.toString().trim().toUpperCase();
-    console.log(pesquisa);
 
     const urlsEncontradas = mapa.flatMap(element =>
         element.linhas.filter(item => item.name.trim().toUpperCase() === pesquisa)
